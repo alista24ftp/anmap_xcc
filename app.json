@@ -1,0 +1,46 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/login/login",
+    "pages/center/center",
+    "pages/register/register"
+  ],
+"window": {
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "#000",
+  "navigationBarTitleText": "艾尼创想",
+  "navigationBarTextStyle": "white"
+},
+"tabBar": {
+  "color": "#666",
+  "selectedColor": "#e21a81",
+  "backgroundColor": "#ffffff",
+  "borderStyle": "#d9d9d9",
+  "list": [
+      {
+        "selectedIconPath": "images/zw_icony1.png",
+        "iconPath": "images/tab_icons_01.png",
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "selectedIconPath": "images/tab_icons_03.png",
+        "iconPath": "images/zw_iconb3.png",
+        "pagePath": "pages/login/login",
+        "text": "denglu"
+      },
+      {
+        "selectedIconPath": "images/tab_icons_05.png",
+        "iconPath": "images/zw_iconb5.png",
+        "pagePath": "pages/center/center",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+/* pages/member/register/register.wxss */
+.userProfile .infos .item .right .verify {
+    width: 30%;
+    float: right;
+    font-size: 26rpx;
+    border: 0;
+    color: #666;
+    text-align: center;
+}
+
+.orderRFT .left {
+  flex: 1;
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 24rpx;
+  text-align: center;
+}
