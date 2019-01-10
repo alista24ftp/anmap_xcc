@@ -13,8 +13,8 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.4.4",
-	"appid": "wxe68f33ab82f487d8",
-	"projectname": "map",
+	"appid": "wx2b2901d2c566b9fa",
+	"projectname": "anmap",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
