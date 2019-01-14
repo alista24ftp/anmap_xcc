@@ -2,12 +2,15 @@
   <view class="page-section page-section-gap">
     <map
       id="myMap"
+      subkey="2E4BZ-BHYW5-PHKIE-QX4BM-6Y4TV-QWBIO"
       style="width: 100%; height: 300px;"
       latitude="{{latitude}}"
       longitude="{{longitude}}"
       markers="{{markers}}"
       covers="{{covers}}"
       polyline="{{polyline}}"
+      bindtap="clickMap"
+      bindpoitap="clickMapPoi"
       show-location
     ></map>
   </view>

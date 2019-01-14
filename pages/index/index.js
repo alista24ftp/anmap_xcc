@@ -5,6 +5,29 @@ Page({
   onReady: function (e) {
     //加载小程序地图
     this.mapCtx = wx.createMapContext('myMap');
+    let markers = [{
+      latitude: 39.870702,
+      longitude: 116.426861
+    }];
+    
+    let polyline = [{
+    
+      points: [{
+        longitude: 116.30006457153318,
+        latitude: 39.85968005483189
+      }, {
+          longitude: 116.28770495239256,
+          latitude: 39.86409421057676
+      }],
+      color: '#FF0000DD',
+      arrowLine:true,
+      width: 2,
+      dottedLine: true
+  }];
+    this.setData({
+      polyline: polyline,
+      markers: markers
+    })
   },
   getCenterLocation: function () {
     //获取位置
@@ -61,5 +84,39 @@ Page({
         })
       }
     })
+  },
+  clickMap:function(e){
+    //点击地图时触发
+    console.log(e);
+    var that = this
+    wx.chooseLocation({
+      success: function (res) {
+        that.setData({
+          hasLocation: true,
+          location: {
+            longitude: res.longitude,
+            latitude: res.latitude
+          },
+          detail_info: res.address,
+          wd: res.latitude,
+          jd: res.longitude
+        })
+      },
+      fail: function () {
+        // fail
+      },
+      complete: function () {
+        // complete
+      }
+    })
+
+
+
+
+  },
+  clickMapPoi:function(e){
+    //点击地图poi
+    console.log('e');
+    console.log(e);
   }
 })
