@@ -1,6 +1,7 @@
 // pages/member/login/login.js
 const {ApiHost} = require('../../config.js');
 const {formatImg, successMsg, failMsg} = require('../../utils/util.js');
+const { getLoginData, goLogin } = require('../../utils/login.js');
 Page({
 
   /**
@@ -47,12 +48,16 @@ Page({
                         user: userInfo
                       },
                       success: function (res) {
-                        wx.navigateBack({
+                       /* wx.navigateBack({
                           delta: 1,
                           success: function(res){
                             successMsg('登录成功');
                           }
-                        });
+                        });*/
+                        //跳到个人中心页
+                        wx.switchTab({
+                          url: '/pages/center/center'
+                        })
                       }
                     });
                   } else {
@@ -94,7 +99,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
   },
 
   /**

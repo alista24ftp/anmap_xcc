@@ -31,6 +31,7 @@ Page({
   onShow: function () {
     let that = this;
     getLoginData().then(loginData=>{
+      console.log()
       let loginToken = loginData.loginToken;
       let userInfo = loginData.user;
       console.log(loginToken);
@@ -45,43 +46,16 @@ Page({
           loggedIn: true,
           user: userInfo
         });
-        wx.request({
-          url: ApiHost + '/xcc/home/countOrder',
-          method: 'POST',
-          data: {token: loginToken},
-          success: function(res){
-            console.log(res);
-            if(res.data.code == 200){
-              that.setData({
-                awaitPayCount: res.data.data[1],
-                awaitShipCount: res.data.data[2],
-                awaitRecvCount: res.data.data[3],
-                awaitComCount: res.data.data[4]
-              });
-            }else{
-              that.setData({
-                awaitPayCount: 0,
-                awaitShipCount: 0,
-                awaitRecvCount: 0,
-                awaitComCount: 0
-              });
-            }
-          },
-          fail: function(err){
-            console.error(err);
-            that.setData({
-              awaitPayCount: 0,
-              awaitShipCount: 0,
-              awaitRecvCount: 0,
-              awaitComCount: 0
-            });
-          }
-        });
       }
     }, err=>{
-      goLogin();
-    });
+
+      wx.redirectTo({
+        url: '/pages/login/login'
+      })
+      //goLogin();
     
+    });
+    console.log('1');
   },
 
   /**
