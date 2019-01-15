@@ -1,4 +1,4 @@
 const Config = {
-  ApiHost: 'https://anmap.arnny.net' //'https://pork.arnny.net'
+  ApiHost: 'https://anmap.arnny.net'
 };
 module.exports = Config;

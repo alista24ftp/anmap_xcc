@@ -1,6 +1,7 @@
 const {ApiHost} = require('../../config.js');
 const {validatePhone, validateSubmit} = require('../../utils/regValidate.js');
 const {formatImg, successMsg, failMsg} = require('../../utils/util.js');
+
 Page({
 
   /**

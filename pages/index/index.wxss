@@ -1,8 +1,34 @@
 .page-section-gap{
   box-sizing: border-box;
-  padding: 0 30rpx;
 }
 
 .page-body-button {
   margin-bottom: 30rpx;
+}
+
+.category-select {
+  background-color: #e9e8e8;
+  display: flex;
+  justify-content: center;
+  padding: 15rpx 0;
+}
+
+.display-select {
+  margin-top: 30rpx;
+  display: flex;
+}
+
+.display-select .display-tab {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.display-select .active {
+  color: #ec49ae;
+  border-bottom: 1px solid #ec49ae;
+}
+
+.btn-area {
+  margin-top: 10rpx;
 }

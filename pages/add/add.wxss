@@ -1,0 +1,54 @@
+/* pages/add/add.wxss */
+.header {
+  display: flex;
+  background-color: #e9e8e8;
+  justify-content: center;
+  padding: 15rpx;
+}
+
+.input-group {
+  border: 1px solid #000000;
+  margin: 25rpx 30rpx;
+  border-radius: 10rpx;
+}
+
+.category-item {
+  display: flex;
+  margin: 0 30rpx;
+  align-items: center;
+}
+
+.category {
+  border: 1px solid #000000;
+  margin-left: 20rpx;
+  padding: 10rpx 15rpx;
+  border-radius: 10rpx;
+}
+
+.input-date {
+  display: flex;
+  margin: 30rpx;
+  align-items: center;
+}
+
+.sel-date {
+  margin-left: 20rpx;
+}
+
+.sel-time {
+  margin-left: 20rpx;
+}
+
+.btn-area {
+  display: flex;
+}
+
+.btn-area .btn-reset {
+  background-color: #ffffff;
+  width: 100%;
+}
+
+.btn-area .btn-submit {
+  background-color: #eeea0c;
+  width: 100%;
+}

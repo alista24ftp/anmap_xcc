@@ -1,0 +1,37 @@
+<!--pages/add/add.wxml-->
+<view wx:if="{{hasLocation === true}}">
+  <view class="header">添加信息详情</view>
+  <view class="map-info">
+    <form bindsubmit="onSubmit" bindreset="onReset">
+      <input class="input-group" type="text" placeholder="请输入名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
+      <input class="input-group" type="text" placeholder="请输入详细地址" name="locaddr" value="{{locAddr !== false ? locAddr : ''}}"/>
+      <textarea class="input-group" placeholder="请输入备注信息" name="loccom" value=""></textarea>
+      <view class="category-item">
+        类型: 
+        <view class="category">
+          <picker mode="selector" range="{{categories}}" bindchange="selectCat" value="{{catIndex}}">
+            <view class="picker">{{categories[catIndex]}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="input-date">
+        时间:
+        <view class="sel-date">
+          <picker mode="date" value="{{selectedDate}}" bindchange="selectDate">
+            <view class="picker">{{selectedDate}}</view>
+          </picker>
+        </view>
+        <view class="sel-time">
+          <picker mode="time" value="{{selectedTime}}" bindchange="selectTime">
+            <view class="picker">{{selectedTime}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="btn-area">
+        <button class="btn-reset" form-type="reset">重置</button>
+        <button class="btn-submit" form-type="submit">添加</button>
+      </view>
+    </form>
+  </view>
+</view>
