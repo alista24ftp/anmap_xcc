@@ -44,7 +44,7 @@ module.exports = {
 
   goLogin: () => {
     wx.navigateTo({
-      url: '/pages/member/login/login',
+      url: '/pages/login/login',
       success: function (res) {
         failMsg('请先登录');
       }

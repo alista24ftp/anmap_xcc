@@ -1,0 +1,46 @@
+/* pages/member/edit/editPhone/editPhone.wxss */
+.page-body {
+  display: flex;
+  justify-content: center;
+  margin-top: 50rpx;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  margin: 5rpx;
+}
+
+.entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #000000;
+  padding-bottom: 10rpx;
+}
+
+.cancel::after {
+  border: none;
+}
+
+.cancel {
+  background-color: #ffffff;
+  border-radius: 0;
+  padding: 0;
+  line-height: 0;
+  overflow: visible;
+}
+
+.btn-submit {
+  margin-top: 10rpx;
+}
+
+.submit::after {
+  border: 1px solid #d41c1c;
+}
+
+.submit {
+  background-color: #ffffff;
+  color: #d41c1c;
+  overflow: visible;
+}

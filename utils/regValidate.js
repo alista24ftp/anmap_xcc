@@ -8,7 +8,7 @@ const validatePassword = pwd => pwd && (pwd !== undefined) && (pwd.length >= 4) 
 
 const validateEmail = email => email && (email !== undefined) && (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email));
 
-const validateSubmit = (username, phone, code, pwd) => validateUserName(username) && validatePhone(phone) && validateVerifyCode(code) && validatePassword(pwd);
+const validateSubmit = (phone, code, pwd) => validatePhone(phone) && validateVerifyCode(code) && validatePassword(pwd);
 
 module.exports = {
   validateUserName, validatePhone, validateVerifyCode, validatePassword, validateEmail, validateSubmit

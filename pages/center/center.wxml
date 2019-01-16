@@ -1,115 +1,36 @@
 <!--pages/center/center.wxml-->
-<view class="m-ucenter g-row greybg">
-    <view class="m-uc-top">
-        <view class="m-profile" wx:if="{{loggedIn}}">
-            <image class="avatar" src="{{user.user_photo}}" alt=""></image>
-            <view class="info">
-                <view class="nickname">
-                    {{user.user_name}}
-                </view>
-            </view>
-          
-        </view>
-        
+<view class="page-body" wx:if="{{isLoggedIn}}">
+  <view class="user-info-group">
+    <view class="user-img">
+      <image class="pic" src="{{userPhoto}}"></image>
     </view>
-    <view wx:if="{{loggedIn}}">
-    <view class="m-uc-wrap">
-        <view class="m-uc-wraptit">
-            <text class="txt">我的订单</text>
-        </view>
-        <view class="m-uc-menu">
-            <view class="list">
-                <view class="item">
-                    <navigator url="/pages/member/orderList/orderList?id=1">
-                        <image class="menu-icon" src="/images/center/zwuc_icon1.png" alt=""></image>
-                        <text class="txt">待付款</text>
-                        <text class="red-dot" wx:if="{{awaitPayCount > 0}}">{{awaitPayCount}}</text>
-                    </navigator>
-                </view>
-                <view class="item">
-                    <navigator url="/pages/member/orderList/orderList?id=2">
-                        <image class="menu-icon" src="/images/center/zwuc_icon2.png" alt=""></image>
-                        <text class="txt">待发货</text>
-                        <text class="red-dot" wx:if="{{awaitShipCount > 0}}">{{awaitShipCount}}</text>
-                    </navigator>
-                </view>
-                <view class="item">
-                    <navigator url="/pages/member/orderList/orderList?id=3">
-                        <image class="menu-icon" src="/images/center/zwuc_icon3.png" alt=""></image>
-                        <text class="txt">待收货</text>
-                        <text class="red-dot" wx:if="{{awaitRecvCount > 0}}">{{awaitRecvCount}}</text>
-                    </navigator>
-                </view>
-                <view class="item">
-                    <navigator url="/pages/member/orderList/orderList?id=4">
-                        <image class="menu-icon" src="/images/center/zwuc_icon4.png" alt=""></image>
-                        <text class="txt">待评价</text>
-                        <text class="red-dot" wx:if="{{awaitComCount > 0}}">{{awaitComCount}}</text>
-                    </navigator>
-                </view>
-            </view>
-            <view class="list">
-              <view class="item">
-                  <navigator url="/pages/member/orderList/orderList?id=6">
-                    <image class="menu-icon" src="/images/center/zwuc_icon5.png" alt=""></image>
-                    <text class="txt">已退款</text>
-                  </navigator>
-              </view>
-              <view class="item">
-                  <navigator url="/pages/member/orderList/orderList?id=5">
-                    <image class="menu-icon" src="/images/center/zwuc_icon5.png" alt=""></image>
-                    <text class="txt">交易完成</text>
-                  </navigator>
-              </view>
-              <view class="item">
-                  <navigator url="/pages/member/orderList/orderList?id=0">
-                    <image class="menu-icon" src="/images/center/zwuc_icon5.png" alt=""></image>
-                    <text class="txt">订单关闭</text>
-                  </navigator>
-              </view>
-            </view>
-        </view>
+    <view class="user-info">
+      <text class="user-name">{{userName}}</text>
+      <text class="user-phone">{{userPhone}}</text>
     </view>
-    <view class="m-uc-wrap">
-        <view class="m-uc-wraptit">
-            <text class="txt">我的服务</text>
-        </view>
-        <view class="m-uc-menu">
-            <view class="list">
-                <view class="item">
-                    <navigator url="/pages/member/productStore/productStore">
-                        <image class="menu-icon" src="/images/center/zwuc_icon7.png" alt=""></image>
-                        <text class="txt">收藏夹</text>
-                    </navigator>
-                </view>
-                <view class="item">
-                    <navigator url="/pages/member/productCommentList/productCommentList">
-                        <image class="menu-icon" src="/images/center/zwuc_icon8.png" alt=""></image>
-                        <text class="txt">商品点评</text>
-                    </navigator>
-                </view>
-                <view class="item">
-                    <image class="menu-icon" src="/images/center/zwuc_icon9.png" alt=""></image>
-                    <text class="txt">联系客服</text>
-                </view>
-                <view class="item">
-                    <navigator url="/pages/member/receiveList/receiveList">
-                        <image class="menu-icon" src="/images/center/zwuc_icon10.png" alt=""></image>
-                        <text class="txt">地址管理</text>
-                    </navigator>
-                </view>
-                <view class="item">
-                    <navigator url="/pages/member/account/account">
-                        <image class="menu-icon" src="/images/center/zwuc_icon13.png" alt=""></image>
-                        <text class="txt">设置</text>
-                    </navigator>
-                </view>
-            </view>
-        </view>
+  </view>
+  <view class="user-edit-group">
+    <view class="edit-title">用户信息修改</view>
+    <view class="edit-options">
+      <navigator class="edit" url="/pages/member/edit/editName/editName">
+        <i class="icon ion-ios-person-outline"></i>
+        <text class="label">修改用户名</text>
+      </navigator>
+      <navigator class="edit" url="/pages/member/edit/editPassword/editPassword">
+        <i class="icon ion-ios-locked-outline"></i>
+        <text class="label">修改密码</text>
+      </navigator>
+      <navigator class="edit" url="/pages/member/edit/editPhone/editPhone">
+        <i class="icon ion-ios-telephone-outline"></i>
+        <text class="label">修改手机号</text>
+      </navigator>
+      <navigator class="edit" url="/pages/member/edit/editPhoto/editPhoto">
+        <i class="icon ion-ios-camera-outline"></i>
+        <text class="label">修改头像</text>
+      </navigator>
     </view>
-    </view>
-
-    <view wx:if="{{!loggedIn}}">
-      请登录
-    </view>
+  </view>
+</view>
+<view class="page-body" wx:else>
+  <text class="login-notice">请先登录</text>
 </view>

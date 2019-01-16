@@ -6,10 +6,11 @@
     "pages/center/center",
     "pages/register/register",
     "pages/add/add",
-    "pages/member/edit/editEmail/editEmail",
-    "pages/member/edit/editEmail/editName",
-    "pages/member/edit/editEmail/editPassword",
-    "pages/member/edit/editEmail/editPhoto"
+    "pages/member/edit/editPhone/editPhone",
+    "pages/member/edit/editName/editName",
+    "pages/member/edit/editPassword/editPassword",
+    "pages/member/edit/editPhoto/editPhoto",
+    "pages/chooseLocation/chooseLocation"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,18 +29,6 @@
         "iconPath": "images/tab_icons_01.png",
         "pagePath": "pages/index/index",
         "text": "首页"
-      },
-      {
-        "selectedIconPath": "images/selected_add.png",
-        "iconPath": "images/tab_add_icon.png",
-        "pagePath": "pages/add/add",
-        "text": "添加"
-      },
-      {
-        "selectedIconPath": "images/tab_icons_03.png",
-        "iconPath": "images/zw_iconb3.png",
-        "pagePath": "pages/login/login",
-        "text": "denglu"
       },
       {
         "selectedIconPath": "images/tab_icons_05.png",

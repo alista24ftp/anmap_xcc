@@ -2,14 +2,26 @@
 .header {
   display: flex;
   background-color: #e9e8e8;
+  justify-content: flex-start;
+  padding: 15rpx 25rpx;
+  align-items: center;
+}
+
+.icon {
+  font-size: 50rpx;
+}
+
+.header-title {
+  width: 100%;
+  display: flex;
   justify-content: center;
-  padding: 15rpx;
 }
 
 .input-group {
   border: 1px solid #000000;
   margin: 25rpx 30rpx;
   border-radius: 10rpx;
+  padding: 10rpx;
 }
 
 .category-item {

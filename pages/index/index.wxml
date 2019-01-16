@@ -1,10 +1,15 @@
 <view class="page-body">
   <view class="category-select" wx:if="{{catList !== undefined && catList.length > 0}}">
-    <picker range="{{catList}}" range-key="cat_name" value="{{catIndex}}" bindchange="selectCat">
-      <view class="picker">{{catList[catIndex].cat_name}}</view>
+    <picker class="category-picker" range="{{catList}}" range-key="cat_name" value="{{catIndex}}" bindchange="selectCat">
+      <view class="picker-icon">
+        <i class="icon ion-chevron-down"></i>
+        <view class="picker">
+          <text class="category">{{catList[catIndex].cat_name}}</text>
+        </view>
+      </view>
     </picker>
   </view>
-  <view class="category-select" wx:else>暂时没有地图类型</view>
+  <view class="no-category" wx:else>暂时没有地图类型</view>
   <view class="display-select">
     <view class="display-tab {{displayType == 0 ? 'active' : ''}}" bindtap="displayMap">地图</view>
     <view class="display-tab {{displayType == 1 ? 'active' : ''}}" bindtap="displayList">列表</view>
@@ -30,6 +35,7 @@
       <button bindtap="moveToLocation" class="page-body-button" type="primary">移动到当前位置</button>
       <button bindtap="translateMarker" class="page-body-button" type="primary">移动标注</button>
       <button bindtap="includePoints" class="page-body-button" type="primary">缩放视野展示所有经纬度</button>
+      <button bindtap="addLocation" class="page-body-button" type="primary">添加位置与信息</button>
     </view>
   </view>
   <view class="display-content" wx:else>

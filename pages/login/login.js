@@ -48,23 +48,19 @@ Page({
                         user: userInfo
                       },
                       success: function (res) {
-                       /* wx.navigateBack({
+                        wx.navigateBack({
                           delta: 1,
                           success: function(res){
                             successMsg('登录成功');
                           }
-                        });*/
-                        //跳到个人中心页
-                        wx.switchTab({
-                          url: '/pages/center/center'
-                        })
+                        });
                       }
                     });
                   } else {
                     console.log(res.data);
                     console.log('res');
                     // 未注册
-                    wx.redirectTo({
+                    wx.navigateTo({
                       url: '/pages/register/register?id=' + res.data.openId + '&user_name='+res.data.user_name+'&unionid=' + res.data.unionid + '&userimg=' + res.data.user_img,//userImg,
                       fail: function (err) {
                         console.error(err);
@@ -78,6 +74,7 @@ Page({
                 }
               }
             })
+            console.log(res);
           } else {
             console.log('登录失败！' + res.errMsg);
             failMsg('登录失败');
@@ -99,6 +96,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    
   },
 
   /**

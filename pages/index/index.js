@@ -42,9 +42,17 @@ Page({
   onReady: function (e) {
     //加载小程序地图
     this.mapCtx = wx.createMapContext('myMap');
+    /*
     let markers = [{
       latitude: 39.870702,
       longitude: 116.426861
+    }];*/
+    let markers = [{
+      longitude: 116.30006457153318,
+      latitude: 39.85968005483189
+    }, {
+      longitude: 116.28770495239256,
+      latitude: 39.86409421057676
     }];
     
     let polyline = [{
@@ -122,6 +130,12 @@ Page({
           longitude: 116.30633021179197,
       }]
     })
+  },
+
+  addLocation: function(e){
+    wx.navigateTo({
+      url: '/pages/chooseLocation/chooseLocation'
+    });
   },
 
   clickMap:function(e){

@@ -1,0 +1,12 @@
+<!--pages/member/edit/editPhone/editPhone.wxml-->
+<view class="page-body">
+  <form class="edit-form" bindreset="reset" bindsubmit="submit">
+    <view class="entry">
+      <input type="number" maxlength="11" placeholder="输入新电话" value="" />
+      <button class="cancel" form-type="reset"><i class="icon u-clear ion-ios-close"></i></button>
+    </view>
+    <view class="btn-submit">
+      <button class="submit" form-type="submit">修改电话</button>
+    </view>
+  </form>
+</view>

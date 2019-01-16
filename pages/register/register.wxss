@@ -1,17 +1,81 @@
 /* pages/member/register/register.wxss */
-.userProfile .infos .item .right .verify {
-    width: 30%;
-    float: right;
+.header {
+  display: flex;
+  background-color: #e9e8e8;
+  justify-content: flex-start;
+  padding: 15rpx 25rpx;
+  align-items: center;
+}
+
+.icon {
+  font-size: 50rpx;
+}
+
+.header-title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.user-profile {
+  display: flex;
+  justify-content: center;
+}
+
+.reg-form {
+  width: 100%;
+}
+
+.avatar {
+  display: flex;
+  justify-content: center;
+  margin: 40rpx 0;
+}
+
+.avatar .pic {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+}
+
+.infos {
+  margin-bottom: 40rpx;
+  padding: 20rpx;
+}
+
+.item {
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.item .left {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  flex: 1;
+}
+
+.item .right {
+  display: flex;
+}
+
+.user-profile .infos .item .right .verify {
     font-size: 26rpx;
     border: 0;
     color: #666;
     text-align: center;
 }
 
-.orderRFT .left {
-  flex: 1;
-  height: 100rpx;
-  line-height: 100rpx;
-  font-size: 24rpx;
-  text-align: center;
+.btn-area {
+  display: flex;
+}
+
+.btn-area .btn-reset {
+  width: 100%;
+}
+
+.btn-area .btn-submit {
+  background-color: #eeea0c;
+  width: 100%;
 }

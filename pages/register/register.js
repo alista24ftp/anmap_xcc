@@ -1,5 +1,5 @@
 const {ApiHost} = require('../../config.js');
-const {validatePhone, validateSubmit} = require('../../utils/regValidate.js');
+const {validatePhone, validateVerifyCode, validateSubmit} = require('../../utils/regValidate.js');
 const {formatImg, successMsg, failMsg} = require('../../utils/util.js');
 
 Page({
@@ -8,7 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    disabled: true
+    disabled: true,
+    codeDisabled: true
   },
 
   /**
@@ -23,6 +24,7 @@ Page({
       openId: openId,
       unionId: unionId,
       userImg: userImg,
+      userFullImg: formatImg(userImg),
       user_name: user_name
     });
   },
@@ -71,13 +73,12 @@ Page({
           user_tel: phoneNum
         },
         success: function (res) {
-         // if (res.data.code == 200 && res.data.type==1) {
-            if (true) {
+          console.log(res);
+          if (res.data.code == 200 && res.data.type==1) {
             successMsg('验证码发送成功');
             that.setData({
               verifyCode: res.data.data,
-              user_phone: phoneNum,
-              disabled: false
+              codeDisabled: false
             });
           } else {
             console.error(res);
@@ -96,13 +97,23 @@ Page({
     
   },
 
+  checkCode: function(e){
+    if(validateVerifyCode(e.detail.value) && e.detail.value == this.data.verifyCode){
+      this.setData({
+        disabled: false
+      });
+    }else{
+      this.setData({
+        disabled: true
+      });
+    }
+  },
+
   formSubmit: function(e){
     let inputInfo = e.detail.value;
     let that = this;
     console.log(that);
-    console.log('that');
-    //if(validateSubmit(inputInfo.phone, inputInfo.verify, inputInfo.pwd) && inputInfo.verify == that.data.verifyCode){
-      if (true) {
+    if(validateSubmit(inputInfo.phone, inputInfo.verify, inputInfo.pwd) && inputInfo.verify == that.data.verifyCode){
       wx.request({
         url: ApiHost + '/xcc/Login/register',
         method: 'POST',
@@ -130,8 +141,11 @@ Page({
                   user: userInfo
                 },
                 success: function (info) {
-                  wx.switchTab({
-                    url: '/pages/login/login'
+                  wx.navigateBack({
+                    delta: 2,
+                    success: function(res){
+                      successMsg('注册成功');
+                    }
                   })
                 },
                 fail: function (err) {
@@ -162,6 +176,10 @@ Page({
 
   formReset: function(e){
     // automatically reset all input fields
+    this.setData({
+      disabled: true,
+      codeDisabled: true
+    });
   },
 
   /**

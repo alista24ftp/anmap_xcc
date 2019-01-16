@@ -1,4 +1,4 @@
-// pages/member/edit/editEmail/editName.js
+// pages/member/edit/editPhone/editPhone.js
 Page({
 
   /**

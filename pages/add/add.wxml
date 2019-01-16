@@ -1,6 +1,11 @@
 <!--pages/add/add.wxml-->
-<view wx:if="{{hasLocation === true}}">
-  <view class="header">添加信息详情</view>
+<view wx:if="{{hasLocation === true && catList !== undefined && catList.length > 0}}">
+  <view class="header">
+    <i class="icon ion-arrow-left-c" bindtap="goBack"></i>
+    <text class="header-title" wx:if="{{type == 'add'}}">添加信息详情</text>
+    <text class="header-title" wx:else>修改信息详情</text>
+    <i class="icon ion-ios-home-outline" bindtap="homepage"></i>
+  </view>
   <view class="map-info">
     <form bindsubmit="onSubmit" bindreset="onReset">
       <input class="input-group" type="text" placeholder="请输入名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
@@ -8,11 +13,12 @@
       <textarea class="input-group" placeholder="请输入备注信息" name="loccom" value=""></textarea>
       <view class="category-item">
         类型: 
-        <view class="category">
-          <picker mode="selector" range="{{categories}}" bindchange="selectCat" value="{{catIndex}}">
-            <view class="picker">{{categories[catIndex]}}</view>
+        <view class="category" wx:if="{{catList !== undefined && catList.length > 0}}">
+          <picker mode="selector" range="{{catList}}" range-key="cat_name" bindchange="selectCat" value="{{catIndex}}">
+            <view class="picker">{{catList[catIndex].cat_name}}</view>
           </picker>
         </view>
+        <view class="category" wx:else>无</view>
       </view>
       <view class="input-date">
         时间:
@@ -35,3 +41,4 @@
     </form>
   </view>
 </view>
+<view wx:else>无法获取位置信息/没有任何分类</view>

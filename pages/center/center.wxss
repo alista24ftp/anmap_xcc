@@ -1,10 +1,58 @@
 /* pages/center/center.wxss */
-.m-profile .please-login {
-  font-size: 37rpx;
-  color: #fff;
+.user-info-group {
+  width: 100%;
+  background-color: #1b8535;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100rpx 0;
 }
 
-.m-profile .memberPoints {
-  color: #b4a078;
+.user-img {
+  margin-right: 30rpx;
+}
+
+.user-img .pic{
+  border: 1px solid #000000;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
   font-size: 27rpx;
+}
+
+.user-edit-group {
+  padding: 30rpx;
+  background-color: #abd6fe
+}
+
+.user-edit-group .edit-title {
+  border-bottom: 1px solid #234d5e;
+  padding-bottom: 20rpx;
+}
+
+.user-edit-group .edit-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edit .icon {
+  font-size: 100rpx;
+}
+
+.edit .label {
+  font-size: 25rpx;
 }
