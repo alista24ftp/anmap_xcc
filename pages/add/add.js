@@ -2,6 +2,7 @@
 const {ApiHost} = require('../../config.js');
 const {formatDate, formatTime, failMsg, successMsg} = require('../../utils/util.js');
 const {validateAllInfo} = require('../../utils/locationValidate.js');
+const {getToken, goLogin} = require('../../utils/login.js');
 
 Page({
 
@@ -18,30 +19,41 @@ Page({
   onLoad: function (options) {
     console.log(options);
     let that = this;
-    let todayFullDate = new Date(Date.now());
-    let todayDate = formatDate(todayFullDate);
-    let todayTime = formatTime(todayFullDate);
-    if(options.type == 'add'){
-      let locData = JSON.parse(options.locdata);
+    let locData = JSON.parse(options.locdata);
+    if (options.type == 'add') {
       locData.type = 'add';
+      let todayFullDate = new Date(Date.now());
+      let todayDate = formatDate(todayFullDate);
+      let todayTime = formatTime(todayFullDate);
+      locData.selectedDate = todayDate;
+      locData.selectedTime = todayTime;
       that.setData(locData);
-    }else{
-      that.setData({type: 'edit'});
+    } else {
+      locData.type = 'edit';
+      let fullDate = new Date(locData.selectedTime);
+      locData.selectedDate = formatDate(fullDate);
+      locData.selectedTime = formatTime(fullDate);
+      that.setData(locData);
     }
-    that.setData({
-      selectedDate: todayDate,
-      selectedTime: todayTime
-    });
     wx.request({
       url: ApiHost + '/inter/index/article_cats',
       method: 'POST',
       success: function (res) {
         console.log(res);
         if (res.data.code == 200) {
-          that.setData({
-            catList: res.data.list,
-            catIndex: 0
-          });
+          let catList = res.data.list;
+          if(options.type == 'add'){
+            that.setData({
+              catList,
+              catIndex: 0
+            });
+          }else{
+            let idx = catList.map(cat => cat.cat_id).findIndex(id => id == locData.catId);
+            that.setData({
+              catList,
+              catIndex: (idx >= 0) ? idx : 0
+            });
+          }
         } else {
           failMsg('获取类型异常');
         }
@@ -85,43 +97,47 @@ Page({
     let catId = catList[catIndex].cat_id;
     if(validateAllInfo(longitude, latitude, locname, locaddr, catId)){
       // 提交表单
-      let postData = {
-        token,
-        cat_id: catId,
-        lat: latitude,
-        lon: longitude,
-        name: locname,
-        address: locaddr,
-        remarks: loccom,
-        input_time: new Date(selectedDate + ' ' + selectedTime).getTime(),
-      };
-      if(that.data.type == 'edit'){
-        postData.article_id = that.data.artId;
-      }
-      wx.request({
-        url: ApiHost + '/inter/home/addArticle',
-        method: 'POST',
-        data: postData,
-        success: function(res){
-          console.log(res);
-          if(res.data.code == 200){
-            if(res.data.status == 1){
-              wx.reLaunch({
-                url: '/pages/index/index',
-                success: function(res){
-                  successMsg('提交成功');
-                }
-              });
-            }else{
-              failMsg('提交失败');
-            }
-          }else{
-            failMsg('提交参数错误');
-          }
-        },
-        fail: function(err){
-          failMsg('无法提交信息');
+      getToken().then(token=>{
+        let postData = {
+          token,
+          cat_id: catId,
+          lat: latitude,
+          lon: longitude,
+          name: locname,
+          address: locaddr,
+          remarks: loccom,
+          input_time: Math.floor(new Date(selectedDate + ' ' + selectedTime).getTime() / 1000),
+        };
+        if (that.data.type == 'edit') {
+          postData.article_id = that.data.artId;
         }
+        wx.request({
+          url: ApiHost + '/inter/home/addArticle',
+          method: 'POST',
+          data: postData,
+          success: function (res) {
+            console.log(res);
+            if (res.data.code == 200) {
+              if (res.data.status == 1) {
+                wx.reLaunch({
+                  url: '/pages/index/index',
+                  success: function (res) {
+                    successMsg('提交成功');
+                  }
+                });
+              } else {
+                failMsg('提交失败');
+              }
+            } else {
+              failMsg('提交参数错误');
+            }
+          },
+          fail: function (err) {
+            failMsg('无法提交信息');
+          }
+        });
+      }, err=>{
+        goLogin();
       });
     }else{
       failMsg('位置信息错误');

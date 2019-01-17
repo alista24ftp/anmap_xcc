@@ -2,15 +2,14 @@
 <view wx:if="{{hasLocation === true && catList !== undefined && catList.length > 0}}">
   <view class="header">
     <i class="icon ion-arrow-left-c" bindtap="goBack"></i>
-    <text class="header-title" wx:if="{{type == 'add'}}">添加信息详情</text>
-    <text class="header-title" wx:else>修改信息详情</text>
+    <text class="header-title">信息详情</text>
     <i class="icon ion-ios-home-outline" bindtap="homepage"></i>
   </view>
   <view class="map-info">
     <form bindsubmit="onSubmit" bindreset="onReset">
       <input class="input-group" type="text" placeholder="请输入名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
       <input class="input-group" type="text" placeholder="请输入详细地址" name="locaddr" value="{{locAddr !== false ? locAddr : ''}}"/>
-      <textarea class="input-group" placeholder="请输入备注信息" name="loccom" value=""></textarea>
+      <textarea class="input-group" placeholder="请输入备注信息" name="loccom" value="{{locCom !== false ? locCom : ''}}"></textarea>
       <view class="category-item">
         类型: 
         <view class="category" wx:if="{{catList !== undefined && catList.length > 0}}">
@@ -36,7 +35,7 @@
 
       <view class="btn-area">
         <button class="btn-reset" form-type="reset">重置</button>
-        <button class="btn-submit" form-type="submit">添加</button>
+        <button class="btn-submit" form-type="submit">更改</button>
       </view>
     </form>
   </view>

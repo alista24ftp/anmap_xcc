@@ -42,7 +42,7 @@
               <view class="left">
                 <text class="label">密码</text>
                 <view class="input-wrap">
-                   <input type="password" name="pwd" class="txtInput" value="" maxlength="20" placeholder="请输入密码" disabled="{{disabled}}" />
+                   <input password type="text" name="pwd" class="txtInput" value="" maxlength="20" placeholder="请输入密码" disabled="{{disabled}}" />
                 </view>
               </view>
             </view>

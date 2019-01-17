@@ -1,11 +1,15 @@
 // pages/member/edit/editPhone/editPhone.js
+const {ApiHost} = require('../../../../config.js');
+const {validatePhone} = require('../../../../utils/regValidate.js');
+const {getLoginData, goLogin} = require('../../../../utils/login.js');
+const {failMsg, successMsg} = require('../../../../utils/util.js');
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    disabled: true
   },
 
   /**
@@ -26,7 +30,66 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    let that = this;
+    getLoginData().then(loginData=>{}, err=>{
+      goLogin();
+    });
+  },
 
+  reset: function(e){
+    this.setData({
+      disabled: true
+    });
+  },
+
+  checkPhone: function(e){
+    this.setData({
+      disabled: !validatePhone(e.detail.value)
+    });
+  },
+
+  submit: function(e){
+    console.log(e);
+    if(!this.data.disabled && validatePhone(e.detail.value.phone)){
+      getLoginData().then(loginData=>{
+        wx.request({
+          url: ApiHost + '/inter/home/updateMsg',
+          method: 'POST',
+          data: {
+            token: loginData.loginToken,
+            data: e.detail.value.phone,
+            type: 2
+          },
+          success: function(res){
+            if(res.data.code == 200){
+              if(res.data.type == 1){
+                loginData.user.user_tel = e.detail.value.phone;
+                wx.setStorage({
+                  key: 'userinfo',
+                  data: loginData,
+                  success: function(res){
+                    wx.navigateBack({
+                      delta: 1,
+                      success: function (res) {
+                        successMsg('修改成功');
+                      }
+                    });
+                  }
+                });
+              }else{
+                failMsg('修改失败');
+              }
+            }else if(res.data.code == 400){
+              failMsg('修改参数错误');
+            }else{
+              failMsg('用户不存在');
+            }
+          }
+        });
+      }, err=>{
+        goLogin();
+      });
+    }
   },
 
   /**

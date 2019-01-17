@@ -1,11 +1,22 @@
 const {ApiHost} = require('../../config.js');
 const {failMsg} = require('../../utils/util.js');
+const {getToken, goLogin} = require('../../utils/login.js');
+const {getLocationsByCat, getCurrentLocation} = require('../../utils/location.js');
 Page({
   data: {
     displayType: 0, // 0 - 地图, 1 - 列表
   },
 
-  onLoad: function (options) {
+  onLoad: function (options) { 
+    
+  },
+
+  onReady: function (e) {
+    //加载小程序地图
+    this.mapCtx = wx.createMapContext('myMap');
+  },
+
+  onShow: function(){
     let that = this;
     wx.request({
       url: ApiHost + '/inter/index/article_cats',
@@ -13,78 +24,111 @@ Page({
       success: function (res) {
         console.log(res);
         if (res.data.code == 200) {
-          that.setData({ 
+          that.setData({
             catList: res.data.list,
-            catIndex: 0 
+            catIndex: 0
+          }, ()=>{
+            if(res.data.list.length > 0){
+              that.getLocations(res.data.list[0].cat_id, '#'+res.data.list[0].cat_description);
+            }
           });
-        }else{
+        } else {
           failMsg('获取类型异常');
         }
       },
-      fail: function(err){
+      fail: function (err) {
         failMsg('获取类型失败');
       }
     });
     //获取当前坐标
-    wx.getLocation({
-      type: 'gcj02',
-      success(res) {
-        const latitude = res.latitude
-        const longitude = res.longitude
-        that.setData({
-          latitude: latitude,
-          longitude: longitude
-        })
-      }
-    })
-  },
-
-  onReady: function (e) {
-    //加载小程序地图
-    this.mapCtx = wx.createMapContext('myMap');
-    /*
-    let markers = [{
-      latitude: 39.870702,
-      longitude: 116.426861
-    }];*/
-    let markers = [{
-      longitude: 116.30006457153318,
-      latitude: 39.85968005483189
-    }, {
-      longitude: 116.28770495239256,
-      latitude: 39.86409421057676
-    }];
-    
-    let polyline = [{
-      points: [{
-        longitude: 116.30006457153318,
-        latitude: 39.85968005483189
-      }, {
-          longitude: 116.28770495239256,
-          latitude: 39.86409421057676
-      }],
-      color: '#FF0000DD',
-      arrowLine:true,
-      width: 2,
-      dottedLine: true
-    }];
-
-    this.setData({
-      polyline: polyline,
-      markers: markers
-    })
+    getCurrentLocation().then(location => {
+      that.setData(location);
+    }, err => {
+      failMsg('无法定当前位置');
+    });
   },
 
   selectCat: function(e){
-    this.setData({catIndex: e.detail.value});
+    this.setData({ catIndex: e.detail.value });
+    this.getLocations(this.data.catList[e.detail.value].cat_id, '#'+this.data.catList[e.detail.value].cat_description);
+  },
+
+  getLocations: function(catId, catColor){
+    let that = this;
+    if(that.data.displayType == 0){
+      // 地图
+      getToken().then(token => {
+        getLocationsByCat(token, catId).then(locData => {
+          console.log(locData);
+          let markers = locData.data.filter(loc=>loc.is_show == 1).map((loc, i)=>{
+            return {id: i+1, latitude: loc.lat, longitude: loc.lon};
+          });
+          let polyline = locData.is_connection == 1 ? [{
+            points: markers.map(m=>{return {latitude: m.latitude, longitude: m.longitude}}),
+            color: catColor,
+            arrowLine: true,
+            width: 2,
+            dottedLine: true
+          }] : []; 
+          that.setData({
+            markers, 
+            polyline,
+            locations: locData.data,
+            showLine: locData.is_connection == 1
+          });
+        }, err => {
+          failMsg('获取不到列表');
+        });
+      }, err=>{});
+    }else{
+      // 列表
+      getToken().then(token=>{
+        getLocationsByCat(token, catId).then(locData=>{
+          console.log(locData);
+          that.setData({
+            locations: locData.data,
+            showLine: locData.is_connection == 1
+          });
+        }, err=>{
+          failMsg('获取不到列表');
+        });
+      }, err=>{
+        goLogin();
+      });
+    }
   },
 
   displayMap: function(e){
-    this.setData({displayType: 0});
+    let that = this;
+    this.setData({displayType: 0}, ()=>{
+      that.getLocations(that.data.catList[that.data.catIndex].cat_id, '#'+that.data.catList[that.data.catIndex].cat_description);
+    });
   },
 
   displayList: function (e) {
-    this.setData({ displayType: 1 });
+    let that = this;
+    this.setData({ displayType: 1 }, ()=>{
+      that.getLocations(that.data.catList[that.data.catIndex].cat_id, '#'+that.data.catList[that.data.catIndex].cat_description);
+    });
+  },
+
+  edit: function(e){
+    let locIndex = e.currentTarget.dataset.index;
+    let location = this.data.locations[locIndex];
+    let locData = {
+      hasLocation: true,
+      locAddr: location.address,
+      locName: location.name,
+      locCom: location.remarks,
+      latitude: Number(location.lat),
+      longitude: Number(location.lon),
+      artId: location.article_id,
+      selectedTime: Number(location.input_time) * 1000,
+      catId: location.cat_id
+    }
+    wx.navigateTo({
+      url: '/pages/add/add?type=edit&locdata=' + JSON.stringify(locData)
+    });
   },
 
   getCenterLocation: function () {
@@ -109,8 +153,8 @@ Page({
       autoRotate: true,
       duration: 1000,
       destination: {
-        latitude: 23.10229,
-        longitude: 113.3345211,
+        latitude: 39.85856,
+        longitude: 116.28616,
       },
       animationEnd() {
         console.log('animation end')

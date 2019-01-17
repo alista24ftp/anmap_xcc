@@ -2,7 +2,7 @@
 .page-body {
   display: flex;
   justify-content: center;
-  margin-top: 50rpx;
+  margin-top: 25%;
 }
 
 .edit-form {
@@ -42,5 +42,15 @@
 .submit {
   background-color: #ffffff;
   color: #d41c1c;
+  overflow: visible;
+}
+
+.disabled::after {
+  border: none;
+}
+
+.disabled {
+  background-color: #e0dddd;
+  color: #ffffff;
   overflow: visible;
 }

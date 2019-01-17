@@ -54,3 +54,26 @@
 .btn-area {
   margin-top: 10rpx;
 }
+
+.location-list {
+  margin-top: 15rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.location {
+  padding: 20rpx 15rpx;
+  border-bottom: 1px solid #e9e8e8;
+}
+
+.loc-wrap {
+  display: flex;
+  flex-direction: column;
+  font-size: 27rpx;
+}
+
+.no-location-list, .no-location {
+  margin-top: 35rpx;
+  display: flex;
+  justify-content: center;
+}
