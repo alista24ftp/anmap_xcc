@@ -114,6 +114,29 @@ const uploadImgs = (token, imgPaths) => {
   return Promise.all(imgs);
 }
 
+const getSettings = () => {
+  return new Promise((resolve, reject)=>{
+    wx.request({
+      url: ApiHost + '/inter/index/index',
+      method: 'POST',
+      success: function (res) {
+        if (res.data.code == 200) {
+          resolve({
+            centerImg: formatImg(res.data.home_img),
+            homeImg: formatImg(res.data.index_img),
+            sharedMsg: res.data.shared_words
+          });
+        } else {
+          reject('无法获取配置');
+        }
+      },
+      fail: function(err){
+        reject('无法获取配置');
+      }
+    });
+  });
+};
+
 module.exports = { 
   formatFullDate,
   formatDate,
@@ -123,5 +146,6 @@ module.exports = {
   failMsg: failMsg,
   setPrevPageAndBack,
   uploadImgs,
-  convertToTimestamp
+  convertToTimestamp,
+  getSettings
 }

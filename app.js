@@ -1,6 +1,4 @@
 //app.js
-const {ApiHost} = require('./config.js');
-const {formatImg, failMsg} = require('./utils/util.js');
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -35,29 +33,6 @@ App({
       }
     })
 
-    wx.request({
-      url: ApiHost + '/inter/index/index',
-      method: 'POST',
-      success: function(res){
-        console.log(res);
-        if(res.data.code == 200){
-          wx.setStorage({
-            key: 'settings',
-            data: {
-              centerImg: formatImg(res.data.home_img),
-              homeImg: formatImg(res.data.index_img),
-              sharedMsg: res.data.shared_words
-            },
-            fail: function(err){
-              console.error(err);
-              failMsg('配置失败');
-            }
-          });
-        }else{
-          failMsg('无法获取配置');
-        }
-      }
-    });
   },
   globalData: {
     userInfo: null

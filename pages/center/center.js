@@ -1,7 +1,7 @@
 // pages/center/center.js
 const { ApiHost } = require('../../config.js');
-const { formatImg, successMsg, failMsg } = require('../../utils/util.js');
-const { getLoginData, goLogin } = require('../../utils/login.js');
+const { formatImg, successMsg, failMsg, getSettings } = require('../../utils/util.js');
+const { getToken, getLoginData, goLogin, getUserInfoByToken } = require('../../utils/login.js');
 Page({
 
   /**
@@ -15,25 +15,21 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    let that = this;
+    getSettings().then(settings => {
+      that.setData({
+        centerImg: settings.centerImg
+      });
+    }, err => {
+      failMsg('无法获取配置');
+    });
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    let that = this;
-    wx.getStorage({
-      key: 'settings',
-      success: function (settings) {
-        that.setData({
-          centerImg: settings.data.centerImg
-        });
-      },
-      fail: function (err) {
-        failMsg('无法获取背景图');
-      }
-    });
+    
   },
 
   /**
@@ -41,15 +37,31 @@ Page({
    */
   onShow: function () {
     let that = this;
-    getLoginData().then(loginData => {
-      console.log(loginData);
-      that.setData({
-        isLoggedIn: true,
-        userName: loginData.user.user_name,
-        userPhone: loginData.user.user_tel,
-        userPhoto: loginData.user.user_photo
+    getLoginData().then(loginData=>{
+      getUserInfoByToken(loginData.loginToken).then(info=>{
+        console.log(info);
+        loginData.user.user_name = info.user_name;
+        loginData.user.user_tel = info.user_tel;
+        loginData.user.user_img = info.user_img;
+        loginData.user.user_photo = formatImg(info.user_img);
+        that.setData({
+          isLoggedIn: true,
+          userName: loginData.user.user_name,
+          userPhone: loginData.user.user_tel,
+          userPhoto: loginData.user.user_photo
+        });
+        wx.setStorage({
+          key: 'userinfo',
+          data: loginData,
+          fail: function(err){
+            failMsg('无法设置用户');
+          }
+        });
+      }, err=>{
+        console.error(err);
+        failMsg(err);
       });
-    }, err => {
+    }, err=>{
       goLogin();
     });
   },

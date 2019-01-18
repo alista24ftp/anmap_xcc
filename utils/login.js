@@ -1,3 +1,4 @@
+const {ApiHost} = require('../config.js');
 const {failMsg} = require('./util.js');
 module.exports = {
   getToken: function(){
@@ -25,6 +26,30 @@ module.exports = {
           reject(err);
         }
       })
+    });
+  },
+
+  getUserInfoByToken: function(token){
+    return new Promise(function(resolve, reject){
+      wx.request({
+        url: ApiHost + '/xcc/Login/getInfo',
+        data: {token},
+        method: 'POST',
+        success: function(res){
+          if(res.data.code == 200){
+            if(res.data.type == 1){
+              resolve(res.data.data);
+            }else{
+              reject('没有用户信息');
+            }
+          }else{
+            reject('获取用户异常');
+          }
+        },
+        fail: function(err){
+          reject(err);
+        }
+      });
     });
   },
 
