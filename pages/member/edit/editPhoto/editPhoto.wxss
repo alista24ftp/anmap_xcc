@@ -1,7 +1,6 @@
 /* pages/member/edit/editPhoto/editPhoto.wxss */
 .img-form {
-  padding: 41rpx;
-  padding-top: 115rpx;
+  padding: 115rpx;
 }
 
 .img-wrap image {

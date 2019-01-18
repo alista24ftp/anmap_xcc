@@ -1,6 +1,6 @@
 // pages/member/edit/editPhone/editPhone.js
 const {ApiHost} = require('../../../../config.js');
-const {validatePhone} = require('../../../../utils/regValidate.js');
+const {validatePhone, validateVerifyCode} = require('../../../../utils/regValidate.js');
 const {getLoginData, goLogin} = require('../../../../utils/login.js');
 const {failMsg, successMsg} = require('../../../../utils/util.js');
 Page({
@@ -9,7 +9,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    disabled: true
+    disabled: true,
+    disableVerify: true
   },
 
   /**
@@ -38,14 +39,68 @@ Page({
 
   reset: function(e){
     this.setData({
-      disabled: true
+      phone: '',
+      disabled: true,
+      disableVerify: true,
+      showCodeEntry: false
     });
   },
 
   checkPhone: function(e){
     this.setData({
-      disabled: !validatePhone(e.detail.value)
+      phone: e.detail.value,
+      disableVerify: !validatePhone(e.detail.value)
     });
+    if(!validatePhone(e.detail.value)){
+      this.setData({showCodeEntry: false, disabled: true});
+    }
+  },
+
+  getCode: function(e){
+    if(!this.data.disableVerify){
+      let phoneNum = e.target.dataset.phone;
+      let that = this;
+      if (validatePhone(phoneNum)) {
+        wx.request({
+          url: ApiHost + '/xcc/Login/verificationCode',
+          method: 'POST',
+          data: {
+            user_tel: phoneNum
+          },
+          success: function (res) {
+            console.log(res);
+            if (res.data.code == 200 && res.data.type == 1) {
+              successMsg('验证码发送成功');
+              that.setData({
+                verifyCode: res.data.data,
+                showCodeEntry: true
+              });
+            } else {
+              console.error(res);
+              failMsg('验证码发送失败');
+              that.setData({showCodeEntry: false, disabled: true});
+            }
+          },
+          fail: function (err) {
+            console.error(err);
+            failMsg('无法获取验证码');
+            that.setData({showCodeEntry: false, disabled: true});
+          }
+        });
+      } else {
+        console.error('手机号不正确');
+        failMsg('手机号不正确');
+        that.setData({showCodeEntry: false, disabled: true});
+      }
+    }
+  },
+
+  checkCode: function(e){
+    if(validateVerifyCode(e.detail.value) && e.detail.value == this.data.verifyCode){
+      this.setData({disabled: false});
+    }else{
+      this.setData({disabled: true});
+    }
   },
 
   submit: function(e){

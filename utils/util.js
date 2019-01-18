@@ -22,6 +22,20 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const convertToTimestamp = (dateStr, timeStr) => {
+  let [year, month, day] = dateStr.split('-');
+  let [hour, minute] = timeStr.split(':');
+  let d = new Date();
+  d.setFullYear(Number(year));
+  d.setMonth(Number(month) - 1);
+  d.setDate(Number(day));
+  d.setHours(Number(hour));
+  d.setMinutes(Number(minute));
+  d.setSeconds(0);
+  let timestamp = Math.floor(d.getTime() / 1000);
+  return timestamp;
+}
+
 const formatImg = img => img.trim() == '' ? '' : (hostRegex.test(img.trim()) ? img.trim() : ApiHost + img.trim());
 
 const successMsg = msg => {
@@ -77,7 +91,10 @@ const uploadImg = (token, imgPath) => {
         if (data.code == 200) {
           if (data.type == 1) {
             let uploadedImg = formatImg(data.msg);
-            resolve(uploadedImg);
+            resolve({
+              photoLink: data.msg,
+              fullPhotoLink: uploadedImg
+            });
           } else {
             reject('上传图片失败');
           }
@@ -105,5 +122,6 @@ module.exports = {
   successMsg: successMsg,
   failMsg: failMsg,
   setPrevPageAndBack,
-  uploadImgs
+  uploadImgs,
+  convertToTimestamp
 }

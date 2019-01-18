@@ -11,6 +11,10 @@
   margin: 5rpx;
 }
 
+.form-group {
+  display: flex;
+}
+
 .entry {
   display: flex;
   justify-content: space-between;
@@ -28,6 +32,25 @@
   border-radius: 0;
   padding: 0;
   line-height: 0;
+  overflow: visible;
+}
+
+.btn-verify {
+  background-color: #d41c1c;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  border-radius: 10rpx;
+  font-size: 25rpx;
+  padding: 10rpx;
+  margin-left: 20rpx;
+}
+
+.disable-verify {
+  background-color: #e0dddd;
+  color: #ffffff;
   overflow: visible;
 }
 

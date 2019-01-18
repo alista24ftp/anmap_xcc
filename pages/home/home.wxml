@@ -1,0 +1,2 @@
+<!--pages/home/home.wxml-->
+<image class="bg-home" src="{{homeImg}}"></image>

@@ -31,11 +31,18 @@
       ></map>
     </view>
     <view class="btn-area">
-      <button bindtap="getCenterLocation" class="page-body-button" type="primary">获取当前位置坐标</button>
-      <button bindtap="moveToLocation" class="page-body-button" type="primary">移动到当前位置</button>
-      <button bindtap="translateMarker" class="page-body-button" type="primary">移动标注</button>
-      <button bindtap="includePoints" class="page-body-button" type="primary">缩放视野展示所有经纬度</button>
-      <button bindtap="addLocation" class="page-body-button" type="primary">添加位置与信息</button>
+      <view class="btn-row">
+        <button bindtap="moveToLocation" class="page-body-button" type="primary">移动到当前位置</button>
+        <button bindtap="includePoints" class="page-body-button" type="primary">缩放视野<!--展示所有经纬度--></button>
+      </view>
+      <!-->
+      <view class="btn-row">
+        <button bindtap="getCenterLocation" class="page-body-button" type="primary">获取当前位置坐标</button>
+        <button bindtap="translateMarker" class="page-body-button" type="primary">移动标注</button>
+      </view>-->
+      <view class="btn-row add-row">
+        <button bindtap="addLocation" class="add-btn" type="primary">添加位置与信息</button>
+      </view>
     </view>
   </view>
   <view class="display-content" wx:else>

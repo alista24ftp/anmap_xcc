@@ -1,6 +1,7 @@
 <!--pages/center/center.wxml-->
 <view class="page-body" wx:if="{{isLoggedIn}}">
   <view class="user-info-group">
+    <image class="bg-center" src="{{centerImg}}"></image>
     <view class="user-img">
       <image class="pic" src="{{userPhoto}}"></image>
     </view>

@@ -15,14 +15,25 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    let that = this;
+    wx.getStorage({
+      key: 'settings',
+      success: function (settings) {
+        that.setData({
+          centerImg: settings.data.centerImg
+        });
+      },
+      fail: function (err) {
+        failMsg('无法获取背景图');
+      }
+    });
   },
 
   /**

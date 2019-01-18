@@ -1,6 +1,6 @@
 // pages/add/add.js
 const {ApiHost} = require('../../config.js');
-const {formatDate, formatTime, failMsg, successMsg} = require('../../utils/util.js');
+const {formatDate, formatTime, convertToTimestamp, failMsg, successMsg} = require('../../utils/util.js');
 const {validateAllInfo} = require('../../utils/locationValidate.js');
 const {getToken, goLogin} = require('../../utils/login.js');
 
@@ -94,6 +94,7 @@ Page({
     let {locname, locaddr, loccom} = e.detail.value;
     let that = this;
     let {latitude, longitude, catList, catIndex, selectedDate, selectedTime} = that.data;
+    let inputTime = convertToTimestamp(selectedDate, selectedTime);
     let catId = catList[catIndex].cat_id;
     if(validateAllInfo(longitude, latitude, locname, locaddr, catId)){
       // 提交表单
@@ -106,11 +107,13 @@ Page({
           name: locname,
           address: locaddr,
           remarks: loccom,
-          input_time: Math.floor(new Date(selectedDate + ' ' + selectedTime).getTime() / 1000),
+          input_time: inputTime
         };
         if (that.data.type == 'edit') {
           postData.article_id = that.data.artId;
         }
+        
+        console.log(postData);
         wx.request({
           url: ApiHost + '/inter/home/addArticle',
           method: 'POST',

@@ -1,0 +1,31 @@
+/* pages/home/home.wxss */
+.bg-home {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom:0;
+  left: 0;
+  right: 0;
+}
+
+.test-header {
+  display: flex;
+  margin-top: 30rpx;
+  padding: 0 20rpx; 
+  justify-content: space-between;
+}
+
+.test-hd {
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.test-body {
+  margin: 40rpx;
+  background-color: #ffffff;
+  height: 100rpx;
+}

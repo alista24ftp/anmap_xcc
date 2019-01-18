@@ -1,9 +1,15 @@
 <!--pages/member/edit/editPhone/editPhone.wxml-->
 <view class="page-body">
   <form class="edit-form" bindreset="reset" bindsubmit="submit">
-    <view class="entry">
-      <input type="number" name="phone" maxlength="11" placeholder="输入新电话" value="" bindinput="checkPhone" />
-      <button class="cancel" form-type="reset"><i class="icon u-clear ion-ios-close"></i></button>
+    <view class="form-group">
+      <view class="entry">
+        <input type="number" name="phone" maxlength="11" placeholder="输入新电话" value="" bindinput="checkPhone" />
+        <button class="cancel" form-type="reset"><i class="icon u-clear ion-ios-close"></i></button>
+      </view>
+      <view class="btn-verify {{disableVerify ? 'disable-verify' : ''}}" bindtap="getCode" data-phone="{{phone}}">获取验证码</view>
+    </view>
+    <view class="entry" wx:if="{{showCodeEntry}}">
+      <input type="number" name="verify" maxlength="4" placeholder="输入验证码" value="" bindinput="checkCode" />
     </view>
     <view class="btn-submit">
       <button class="submit {{disabled ? 'disabled' : ''}}" form-type="submit">修改电话</button>

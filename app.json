@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/home/home",
     "pages/index/index",
     "pages/logs/logs",
     "pages/login/login",
@@ -27,8 +28,14 @@
       {
         "selectedIconPath": "images/zw_icony1.png",
         "iconPath": "images/tab_icons_01.png",
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/home/home",
         "text": "首页"
+      },
+      {
+        "selectedIconPath": "images/zw_icony1.png",
+        "iconPath": "images/tab_icons_01.png",
+        "pagePath": "pages/index/index",
+        "text": "地图"
       },
       {
         "selectedIconPath": "images/tab_icons_05.png",
