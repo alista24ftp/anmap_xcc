@@ -22,9 +22,8 @@
         style="width: 100%; height: 300px;"
         latitude="{{latitude}}"
         longitude="{{longitude}}"
-        markers="{{markers}}"
-        covers="{{covers}}"
-        polyline="{{polyline}}"
+        markers="{{catIndex >= 0 ? allLocations[catIndex].markers : []}}"
+        polyline="{{catIndex >= 0 ? allLocations[catIndex].polyline : []}}"
         bindtap="clickMap"
         bindpoitap="clickMapPoi"
         show-location
@@ -47,13 +46,13 @@
   </view>
   <view class="display-content" wx:else>
     <view class="location-list" wx:if="{{catList !== undefined && catList.length > 0}}">
-      <view class="location" wx:for="{{locations}}" wx:for-index="idx">
+      <view class="location" wx:for="{{allLocations[catIndex].data}}" wx:for-index="idx">
         <view class="loc-wrap" data-index="{{idx}}" bindtap="edit">
           <text class="loc-name">{{item.name}}</text>
           <text class="loc-addr">{{item.address}}</text>
         </view>
       </view>
-      <view class="no-location" wx:if="{{locations === undefined || locations.length == 0}}">此分类下没有任何指定位置</view>
+      <view class="no-location" wx:if="{{allLocations === undefined || allLocations[catIndex].data === undefined || allLocations[catIndex].data.length == 0}}">此分类下没有任何指定位置</view>
     </view>
     <view class="no-location-list" wx:else>暂时没有任何地图分类</view>
   </view>

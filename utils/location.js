@@ -46,6 +46,10 @@ const getLocationsByCat = (token, catId) => {
   });
 };
 
+const getAllLocations = (token, catIds) => {
+  return Promise.all(catIds.map(id=>getLocationsByCat(token, id)));
+};
+
 const getCurrentLocation = () => {
   return new Promise((resolve, reject)=>{
     wx.getLocation({
@@ -66,5 +70,6 @@ const getCurrentLocation = () => {
 module.exports = {
   chooseLocation,
   getLocationsByCat,
-  getCurrentLocation
+  getCurrentLocation,
+  getAllLocations
 };

@@ -1,7 +1,7 @@
 const {ApiHost} = require('../../config.js');
 const {failMsg} = require('../../utils/util.js');
 const {getToken, goLogin} = require('../../utils/login.js');
-const {getLocationsByCat, getCurrentLocation} = require('../../utils/location.js');
+const {getLocationsByCat, getCurrentLocation, getAllLocations} = require('../../utils/location.js');
 Page({
   data: {
     displayType: 0, // 0 - 地图, 1 - 列表
@@ -24,20 +24,72 @@ Page({
       success: function (res) {
         console.log(res);
         if (res.data.code == 200) {
-          that.setData({
-            catList: res.data.list,
-            catIndex: 0
-          }, ()=>{
-            if(res.data.list.length > 0){
-              that.getLocations(res.data.list[0].cat_id, '#'+res.data.list[0].cat_description);
-            }
-          });
+          if(res.data.list.length > 0){
+            //let catList = res.data.list.unshift({ cat_name: "所有" });
+            let catList = res.data.list;
+            getToken().then(token => {
+              getAllLocations(token, res.data.list.map(cat=>cat.cat_id)).then(locations => {
+                let allLocations = locations.map((location, cIndex)=>{
+                  let markers = location.data.filter(loc => loc.is_show == 1).map((loc, i) => {
+                    return { id: i + 1, latitude: loc.lat, longitude: loc.lon };
+                  });
+                  let polyline = location.is_connection == 1 ? [{
+                    points: markers.map(m => { return { latitude: m.latitude, longitude: m.longitude } }),
+                    color: '#' + res.data.list[cIndex].cat_description,
+                    arrowLine: true,
+                    width: 2,
+                    dottedLine: true
+                  }] : []; 
+                  location.markers = markers;
+                  location.polyline = polyline;
+                  location.showLine = location.is_connection == 1;
+                  return location;
+                });
+
+                let firstOption = {};
+                firstOption.markers = allLocations.map(location=>location.markers).reduce((a,b)=>a.concat(b), []).map((marker, i)=>{
+                  marker.id = i+1;
+                  return marker;
+                });
+                firstOption.polyline = allLocations.map(location=>location.polyline).reduce((a,b)=>a.concat(b),[]);
+                firstOption.data = allLocations.map(location=>location.data).reduce((a,b)=>a.concat(b), []);
+                firstOption.showLine = true;
+                
+                allLocations.unshift(firstOption);
+                catList.unshift({ cat_name: "所有" });
+
+                that.setData({
+                  allLocations: allLocations,
+                  catList: catList,
+                  catIndex: 0 
+                });
+              }, err => {
+                failMsg('获取不到列表');
+              });
+            }, err => {
+              goLogin();
+            });
+          }else{
+            that.setData({
+              catList: [],
+              catIndex: -1
+            });
+          }
+          
         } else {
           failMsg('获取类型异常');
+          that.setData({
+            catList: [],
+            catIndex: -1
+          });
         }
       },
       fail: function (err) {
         failMsg('获取类型失败');
+        that.setData({
+          catList: [],
+          catIndex: -1
+        });
       }
     });
     //获取当前坐标
@@ -50,71 +102,23 @@ Page({
 
   selectCat: function(e){
     this.setData({ catIndex: e.detail.value });
-    this.getLocations(this.data.catList[e.detail.value].cat_id, '#'+this.data.catList[e.detail.value].cat_description);
-  },
-
-  getLocations: function(catId, catColor){
-    let that = this;
-    if(that.data.displayType == 0){
-      // 地图
-      getToken().then(token => {
-        getLocationsByCat(token, catId).then(locData => {
-          console.log(locData);
-          let markers = locData.data.filter(loc=>loc.is_show == 1).map((loc, i)=>{
-            return {id: i+1, latitude: loc.lat, longitude: loc.lon};
-          });
-          let polyline = locData.is_connection == 1 ? [{
-            points: markers.map(m=>{return {latitude: m.latitude, longitude: m.longitude}}),
-            color: catColor,
-            arrowLine: true,
-            width: 2,
-            dottedLine: true
-          }] : []; 
-          that.setData({
-            markers, 
-            polyline,
-            locations: locData.data,
-            showLine: locData.is_connection == 1
-          });
-        }, err => {
-          failMsg('获取不到列表');
-        });
-      }, err=>{});
-    }else{
-      // 列表
-      getToken().then(token=>{
-        getLocationsByCat(token, catId).then(locData=>{
-          console.log(locData);
-          that.setData({
-            locations: locData.data,
-            showLine: locData.is_connection == 1
-          });
-        }, err=>{
-          failMsg('获取不到列表');
-        });
-      }, err=>{
-        goLogin();
-      });
-    }
+    console.log(this.data);
   },
 
   displayMap: function(e){
     let that = this;
-    this.setData({displayType: 0}, ()=>{
-      that.getLocations(that.data.catList[that.data.catIndex].cat_id, '#'+that.data.catList[that.data.catIndex].cat_description);
-    });
+    this.setData({displayType: 0});
   },
 
   displayList: function (e) {
     let that = this;
-    this.setData({ displayType: 1 }, ()=>{
-      that.getLocations(that.data.catList[that.data.catIndex].cat_id, '#'+that.data.catList[that.data.catIndex].cat_description);
-    });
+    this.setData({ displayType: 1 });
   },
 
   edit: function(e){
     let locIndex = e.currentTarget.dataset.index;
-    let location = this.data.locations[locIndex];
+    let {allLocations, catIndex} = this.data;
+    let location = allLocations[catIndex].data[locIndex];
     let locData = {
       hasLocation: true,
       locAddr: location.address,
@@ -143,7 +147,9 @@ Page({
 
   moveToLocation: function () {
     //移动到当前位置
-    this.mapCtx.moveToLocation()
+    this.mapCtx.moveToLocation();
+    console.log(this.data.catList);
+    console.log(this.data.allLocations);
   },
 
   translateMarker: function () {
@@ -183,36 +189,10 @@ Page({
   },
 
   clickMap:function(e){
-    /*
-    //点击地图时触发
-    console.log(e);
-    var that = this
-    wx.chooseLocation({
-      success: function (res) {
-        that.setData({
-          hasLocation: true,
-          location: {
-            longitude: res.longitude,
-            latitude: res.latitude
-          },
-          detail_info: res.address,
-          wd: res.latitude,
-          jd: res.longitude
-        })
-      },
-      fail: function () {
-        // fail
-      },
-      complete: function () {
-        // complete
-      }
-    })
-    */
+    
   },
 
   clickMapPoi:function(e){
-    //点击地图poi
-    console.log('e');
     console.log(e);
   }
 })
