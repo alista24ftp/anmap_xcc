@@ -18,80 +18,27 @@ Page({
 
   onShow: function(){
     let that = this;
-    wx.request({
-      url: ApiHost + '/inter/index/article_cats',
-      method: 'POST',
-      success: function (res) {
-        console.log(res);
-        if (res.data.code == 200) {
-          if(res.data.list.length > 0){
-            //let catList = res.data.list.unshift({ cat_name: "所有" });
-            let catList = res.data.list;
-            getToken().then(token => {
-              getAllLocations(token, res.data.list.map(cat=>cat.cat_id)).then(locations => {
-                let allLocations = locations.map((location, cIndex)=>{
-                  let markers = location.data.filter(loc => loc.is_show == 1).map((loc, i) => {
-                    return { id: i + 1, latitude: loc.lat, longitude: loc.lon };
-                  });
-                  let polyline = location.is_connection == 1 ? [{
-                    points: markers.map(m => { return { latitude: m.latitude, longitude: m.longitude } }),
-                    color: '#' + res.data.list[cIndex].cat_description,
-                    arrowLine: true,
-                    width: 2,
-                    dottedLine: true
-                  }] : []; 
-                  location.markers = markers;
-                  location.polyline = polyline;
-                  location.showLine = location.is_connection == 1;
-                  return location;
-                });
-
-                let firstOption = {};
-                firstOption.markers = allLocations.map(location=>location.markers).reduce((a,b)=>a.concat(b), []).map((marker, i)=>{
-                  marker.id = i+1;
-                  return marker;
-                });
-                firstOption.polyline = allLocations.map(location=>location.polyline).reduce((a,b)=>a.concat(b),[]);
-                firstOption.data = allLocations.map(location=>location.data).reduce((a,b)=>a.concat(b), []);
-                firstOption.showLine = true;
-                
-                allLocations.unshift(firstOption);
-                catList.unshift({ cat_name: "所有" });
-
-                that.setData({
-                  allLocations: allLocations,
-                  catList: catList,
-                  catIndex: 0 
-                });
-              }, err => {
-                failMsg('获取不到列表');
-              });
-            }, err => {
-              goLogin();
-            });
-          }else{
-            that.setData({
-              catList: [],
-              catIndex: -1
-            });
-          }
-          
-        } else {
-          failMsg('获取类型异常');
-          that.setData({
-            catList: [],
-            catIndex: -1
-          });
-        }
-      },
-      fail: function (err) {
-        failMsg('获取类型失败');
+    that.getCategories().then(categories=>{
+      getToken().then(token => {
         that.setData({
-          catList: [],
-          catIndex: -1
+          catList: [{cat_id: 0, cat_name: "所有"}].concat(categories),
+          catIndex: 0
         });
-      }
+        that.setLocations(token, 0);
+      }, err => {
+        goLogin();
+      });
+    }, err=>{
+      failMsg(err);
+      that.setData({
+        catList: [],
+        catIndex: -1,
+        allLocations: [],
+        markers: [],
+        polyline: []
+      });
     });
+    
     //获取当前坐标
     getCurrentLocation().then(location => {
       that.setData(location);
@@ -100,25 +47,112 @@ Page({
     });
   },
 
+  getCategories: function(){
+    return new Promise((resolve, reject)=>{
+      wx.request({
+        url: ApiHost + '/inter/index/article_cats',
+        method: 'POST',
+        success: function (res) {
+          console.log(res);
+          if (res.data.code == 200) {
+            if (res.data.list.length > 0) {
+              //let catList = res.data.list.unshift({ cat_name: "所有" });
+              resolve(res.data.list);
+            }else{
+              reject('没有类型');
+            }
+          }else{
+            reject('获取类型异常');
+          }
+        },
+        fail: function(err){
+          reject('获取类型失败');
+        }
+      });
+    });
+  },
+
+  setLocations: function(token, catId){
+    let that = this;
+    getLocationsByCat(token, catId).then(locations => {
+      console.log(locations);
+      let allLocations = catId == 0 ? locations.list : locations.data;
+      let markers = allLocations.filter(loc => loc.is_show == 1).map((loc, i) => {
+        return {
+          id: i + 1,
+          latitude: loc.lat,
+          longitude: loc.lon
+        };
+      });
+      let polyline;
+      if(catId == 0){
+        polyline = locations.data.map(category => {
+          let points = locations.list.filter(loc => loc.cat_id == category.cat_id && loc.is_show == 1).map(loc => {
+            return {
+              longitude: loc.lon,
+              latitude: loc.lat
+            };
+          });
+          return {
+            points,
+            color: '#' + category.cat_description,
+            arrowLine: true,
+            width: 2,
+            dottedLine: true
+          };
+        });
+      }else{
+        polyline = locations.is_connection == 1 ? [{
+          points: locations.data.filter(loc=>loc.is_show==1).map(loc=>{
+            return {longitude: loc.lon, latitude: loc.lat};
+          }),
+          color: '#' + locations.cat_description,
+          arrowLine: true,
+          width: 2,
+          dottedLine: true
+        }] : [];
+      }
+      
+      that.setData({
+        allLocations,
+        markers,
+        polyline
+      });
+    }, err => {
+      failMsg(err);
+      that.setData({
+        allLocations: [],
+        markers: [],
+        polyline: []
+      });
+    });
+  },
+
   selectCat: function(e){
+    let catList = this.data.catList;
+    let catId = catList[e.detail.value].cat_id; 
     this.setData({ catIndex: e.detail.value });
-    console.log(this.data);
+    let that = this;
+    getToken().then(token=>{
+      that.setLocations(token, catId);
+    }, err=>{
+      goLogin();
+    });
+    
   },
 
   displayMap: function(e){
-    let that = this;
     this.setData({displayType: 0});
   },
 
   displayList: function (e) {
-    let that = this;
     this.setData({ displayType: 1 });
   },
 
   edit: function(e){
     let locIndex = e.currentTarget.dataset.index;
     let {allLocations, catIndex} = this.data;
-    let location = allLocations[catIndex].data[locIndex];
+    let location = allLocations[locIndex];
     let locData = {
       hasLocation: true,
       locAddr: location.address,

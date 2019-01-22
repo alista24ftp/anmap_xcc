@@ -78,14 +78,16 @@ Page({
   },
 
   onReset: function(e){
-    console.log('重置表单');
+    console.log(e);
     let todayFullDate = new Date(Date.now());
     let todayDate = formatDate(todayFullDate);
     let todayTime = formatTime(todayFullDate); 
+    let locAddr = this.data.locAddr;
     this.setData({
       catIndex: 0,
       selectedDate: todayDate,
-      selectedTime: todayTime
+      selectedTime: todayTime,
+      locAddr: locAddr
     });
   },
 

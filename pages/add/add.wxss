@@ -24,6 +24,10 @@
   padding: 10rpx;
 }
 
+.disabled {
+  background-color: #e9e8e8;
+}
+
 .category-item {
   display: flex;
   margin: 0 30rpx;

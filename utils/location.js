@@ -8,7 +8,7 @@ const chooseLocation = () => {
         resolve({
           hasLocation: (res.longitude && res.latitude) ? true : false,
           locAddr: res.address !== undefined ? res.address : false,
-          locName: res.name !== undefined ? res.name : false,
+          locName: false,//res.name !== undefined ? res.name : false,
           locCom: false,
           latitude: res.latitude,
           longitude: res.longitude

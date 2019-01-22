@@ -19,40 +19,46 @@
       <map
         id="myMap"
         subkey="2E4BZ-BHYW5-PHKIE-QX4BM-6Y4TV-QWBIO"
-        style="width: 100%; height: 300px;"
         latitude="{{latitude}}"
         longitude="{{longitude}}"
-        markers="{{catIndex >= 0 ? allLocations[catIndex].markers : []}}"
-        polyline="{{catIndex >= 0 ? allLocations[catIndex].polyline : []}}"
+        markers="{{markers}}"
+        polyline="{{polyline}}"
         bindtap="clickMap"
         bindpoitap="clickMapPoi"
         show-location
       ></map>
+      <view class="add-btn">
+        <view class="add-btn-icon" bindtap="addLocation">
+          <i class="icon ion-ios-plus-empty"></i>
+        </view>
+      </view>
     </view>
+    <!-->
     <view class="btn-area">
       <view class="btn-row">
         <button bindtap="moveToLocation" class="page-body-button" type="primary">移动到当前位置</button>
-        <button bindtap="includePoints" class="page-body-button" type="primary">缩放视野<!--展示所有经纬度--></button>
+        <view class="add-btn" bindtap="addLocation"><i class="icon ion-ios-plus-empty"></i></view>
+        <button bindtap="includePoints" class="page-body-button" type="primary">缩放视野</button>
       </view>
-      <!-->
       <view class="btn-row">
         <button bindtap="getCenterLocation" class="page-body-button" type="primary">获取当前位置坐标</button>
         <button bindtap="translateMarker" class="page-body-button" type="primary">移动标注</button>
-      </view>-->
+      </view>
       <view class="btn-row add-row">
         <button bindtap="addLocation" class="add-btn" type="primary">添加位置与信息</button>
       </view>
     </view>
+    -->
   </view>
   <view class="display-content" wx:else>
     <view class="location-list" wx:if="{{catList !== undefined && catList.length > 0}}">
-      <view class="location" wx:for="{{allLocations[catIndex].data}}" wx:for-index="idx">
+      <view class="location" wx:for="{{allLocations}}" wx:for-index="idx">
         <view class="loc-wrap" data-index="{{idx}}" bindtap="edit">
           <text class="loc-name">{{item.name}}</text>
           <text class="loc-addr">{{item.address}}</text>
         </view>
       </view>
-      <view class="no-location" wx:if="{{allLocations === undefined || allLocations[catIndex].data === undefined || allLocations[catIndex].data.length == 0}}">此分类下没有任何指定位置</view>
+      <view class="no-location" wx:if="{{allLocations === undefined || allLocations.length == 0}}">此分类下没有任何指定位置</view>
     </view>
     <view class="no-location-list" wx:else>暂时没有任何地图分类</view>
   </view>

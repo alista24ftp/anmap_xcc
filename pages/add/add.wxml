@@ -7,8 +7,8 @@
   </view>
   <view class="map-info">
     <form bindsubmit="onSubmit" bindreset="onReset">
+      <input class="input-group disabled" type="text" placeholder="请输入详细地址" name="locaddr" value="{{locAddr !== false ? locAddr : ''}}" disabled/>
       <input class="input-group" type="text" placeholder="请输入名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
-      <input class="input-group" type="text" placeholder="请输入详细地址" name="locaddr" value="{{locAddr !== false ? locAddr : ''}}"/>
       <textarea class="input-group" placeholder="请输入备注信息" name="loccom" value="{{locCom !== false ? locCom : ''}}"></textarea>
       <view class="category-item">
         类型: 
