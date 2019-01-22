@@ -28,9 +28,9 @@
         show-location
       ></map>
       <view class="add-btn">
-        <view class="add-btn-icon" bindtap="addLocation">
-          <i class="icon ion-ios-plus-empty"></i>
-        </view>
+        <cover-view class="add-btn-icon" bindtap="addLocation">
+          +
+        </cover-view>
       </view>
     </view>
     <!-->
