@@ -124,7 +124,12 @@ const getSettings = () => {
           resolve({
             centerImg: formatImg(res.data.home_img),
             homeImg: formatImg(res.data.index_img),
-            sharedMsg: res.data.shared_words
+            sharedMsg: res.data.shared_words,
+            sharedCode: res.data.shared_code,
+            httpHost: res.data.http_host,
+            ver: res.data.version_number,
+            homeMsg: res.data.index_txt,
+            sharedImg: formatImg(res.data.xcc_img)
           });
         } else {
           reject('无法获取配置');

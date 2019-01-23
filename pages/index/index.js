@@ -1,5 +1,6 @@
+const regeneratorRuntime = require('../../lib/runtime.js');
 const {ApiHost} = require('../../config.js');
-const {failMsg} = require('../../utils/util.js');
+const {failMsg, getSettings} = require('../../utils/util.js');
 const {getToken, goLogin} = require('../../utils/login.js');
 const {getLocationsByCat, getCurrentLocation, getAllLocations} = require('../../utils/location.js');
 Page({
@@ -44,6 +45,15 @@ Page({
       that.setData(location);
     }, err => {
       failMsg('无法定当前位置');
+    });
+
+    getSettings().then(settings=>{
+      that.setData({
+        sharedMsg: settings.sharedMsg,
+        sharedImg: settings.sharedImg
+      });
+    }, err=>{
+      failMsg('无法获取配置');
     });
   },
 
@@ -228,5 +238,14 @@ Page({
 
   clickMapPoi:function(e){
     console.log(e);
+  },
+
+  onShareAppMessage: function(res){
+    console.log(res);
+    let that = this;
+    return {
+      title: that.data.sharedMsg,
+      imageUrl: that.data.sharedImg
+    };
   }
 })

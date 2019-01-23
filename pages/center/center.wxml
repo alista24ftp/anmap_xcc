@@ -21,10 +21,11 @@
         <i class="icon ion-ios-locked-outline"></i>
         <text class="label">修改密码</text>
       </navigator>
+      <!-->
       <navigator class="edit" url="/pages/member/edit/editPhone/editPhone">
         <i class="icon ion-ios-telephone-outline"></i>
         <text class="label">修改手机号</text>
-      </navigator>
+      </navigator>-->
       <navigator class="edit" url="/pages/member/edit/editPhoto/editPhoto">
         <i class="icon ion-ios-camera-outline"></i>
         <text class="label">修改头像</text>

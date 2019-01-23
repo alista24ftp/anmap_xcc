@@ -1,2 +1,3 @@
 <!--pages/home/home.wxml-->
 <image class="bg-home" src="{{homeImg}}"></image>
+<view class="home-msg">{{homeMsg}}</view>

@@ -22,7 +22,8 @@
 .category-select {
   background-color: #e9e8e8;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  align-items: center;
   padding: 15rpx;
 }
 
@@ -34,11 +35,14 @@
 
 .category-picker {
   width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 40%;
 }
 
 .picker-icon {
   display: flex;
-  margin-left: 40%;
+  /*margin-left: 40%;*/
 }
 
 .picker {
@@ -46,6 +50,14 @@
   width: 100%;
   justify-content: flex-start;
   margin-left: 10rpx;
+}
+
+.share-btn::after {
+  border: none;
+}
+
+.share-btn {
+  background-color: #e9e8e8;
 }
 
 .display-select {
@@ -57,12 +69,14 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-bottom: 10rpx;
+  padding-bottom: 30rpx;
+  margin-bottom: 5rpx;
 }
 
 .display-select .active {
   color: #ec49ae;
   border-bottom: 1px solid #ec49ae;
+  overflow: visible;
 }
 
 .display-content {
@@ -70,6 +84,14 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+.cv1 {
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  left: 25%;
+  right: 25%;
 }
 
 #myMap {

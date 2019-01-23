@@ -17,7 +17,8 @@ Page({
     let that = this;
     getSettings().then(settings=>{
       that.setData({
-        homeImg: settings.homeImg
+        homeImg: settings.homeImg,
+        homeMsg: settings.homeMsg
       });
     }, err=>{
       failMsg('无法获取配置');

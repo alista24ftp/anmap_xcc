@@ -10,22 +10,12 @@
   right: 0;
 }
 
-.test-header {
-  display: flex;
-  margin-top: 30rpx;
-  padding: 0 20rpx; 
-  justify-content: space-between;
-}
-
-.test-hd {
-  color: #ffffff;
+.home-msg {
+  position: absolute;
   display: flex;
   justify-content: center;
-  width: 100%;
-}
-
-.test-body {
-  margin: 40rpx;
-  background-color: #ffffff;
-  height: 100rpx;
+  bottom: 15rpx;
+  color: #1f9ee7;
+  text-align: center;
+  padding: 0 25rpx;
 }

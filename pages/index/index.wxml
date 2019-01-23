@@ -8,6 +8,7 @@
         </view>
       </view>
     </picker>
+    <button class="share-btn" open-type="share"><i class="icon ion-share"></i></button>
   </view>
   <view class="no-category" wx:else>暂时没有地图类型</view>
   <view class="display-select">
@@ -27,6 +28,7 @@
         bindpoitap="clickMapPoi"
         show-location
       ></map>
+      
       <view class="add-btn">
         <cover-view class="add-btn-icon" bindtap="addLocation">
           +
