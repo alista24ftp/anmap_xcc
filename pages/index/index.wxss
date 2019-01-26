@@ -52,8 +52,13 @@
   margin-left: 10rpx;
 }
 
-.share-btn::after {
+.curr-location-btn::after, .add-location-btn::after, .share-btn::after{
   border: none;
+}
+
+.curr-location-btn, .add-location-btn {
+  background-color: #e9e8e8;
+  margin-right: 20rpx;
 }
 
 .share-btn {

@@ -8,6 +8,8 @@
         </view>
       </view>
     </picker>
+    <button class="curr-location-btn" bindtap="moveToLocation"><i class="icon ion-location"></i></button>
+    <button class="add-location-btn" bindtap="addLocation"><i class="icon ion-plus-round"></i></button>
     <button class="share-btn" open-type="share"><i class="icon ion-share"></i></button>
   </view>
   <view class="no-category" wx:else>暂时没有地图类型</view>
@@ -28,12 +30,12 @@
         bindpoitap="clickMapPoi"
         show-location
       ></map>
-      
+      <!-->
       <view class="add-btn">
         <cover-view class="add-btn-icon" bindtap="addLocation">
           +
         </cover-view>
-      </view>
+      </view>-->
     </view>
     <!-->
     <view class="btn-area">
@@ -56,6 +58,7 @@
     <view class="location-list" wx:if="{{catList !== undefined && catList.length > 0}}">
       <view class="location" wx:for="{{allLocations}}" wx:for-index="idx">
         <view class="loc-wrap" data-index="{{idx}}" bindtap="edit">
+          <text class="loc-cat" wx:if="{{catIndex == 0}}">[{{item.cat_name}}]</text>
           <text class="loc-name">{{item.name}}</text>
           <text class="loc-addr">{{item.address}}</text>
         </view>

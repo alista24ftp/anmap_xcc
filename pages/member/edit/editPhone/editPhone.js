@@ -47,11 +47,12 @@ Page({
   },
 
   checkPhone: function(e){
+    let validPhone = validatePhone(e.detail.value);
     this.setData({
       phone: e.detail.value,
-      disableVerify: !validatePhone(e.detail.value)
+      disableVerify: !validPhone.status
     });
-    if(!validatePhone(e.detail.value)){
+    if(!validPhone.status){
       this.setData({showCodeEntry: false, disabled: true});
     }
   },
@@ -60,7 +61,8 @@ Page({
     if(!this.data.disableVerify){
       let phoneNum = e.target.dataset.phone;
       let that = this;
-      if (validatePhone(phoneNum)) {
+      let validPhone = validatePhone(phoneNum);
+      if (validPhone.status) {
         wx.request({
           url: ApiHost + '/xcc/Login/verificationCode',
           method: 'POST',
@@ -89,14 +91,14 @@ Page({
         });
       } else {
         console.error('手机号不正确');
-        failMsg('手机号不正确');
+        failMsg(validPhone.errMsg);
         that.setData({showCodeEntry: false, disabled: true});
       }
     }
   },
 
   checkCode: function(e){
-    if(validateVerifyCode(e.detail.value) && e.detail.value == this.data.verifyCode){
+    if(validateVerifyCode(e.detail.value).status && e.detail.value == this.data.verifyCode){
       this.setData({disabled: false});
     }else{
       this.setData({disabled: true});
@@ -105,7 +107,9 @@ Page({
 
   submit: function(e){
     console.log(e);
-    if(!this.data.disabled && validatePhone(e.detail.value.phone)){
+    console.log(this.data);
+    let validPhone = validatePhone(e.detail.value.phone);
+    if(!this.data.disabled && validPhone.status){
       getLoginData().then(loginData=>{
         wx.request({
           url: ApiHost + '/inter/home/updateMsg',
@@ -144,6 +148,8 @@ Page({
       }, err=>{
         goLogin();
       });
+    }else if(!validPhone.status){
+      failMsg(validPhone.errMsg);
     }
   },
 

@@ -30,19 +30,19 @@
                 <button bindtap="getVerify" class="verify" data-phone="{{phoneNum}}">获取验证码</button>
               </view>
             </view>
-            <view class="item">
+            <view class="item" wx:if="{{!disabled}}">
               <view class="left">
                 <text class="label">验证码</text>
                 <view class="input-wrap">
-                   <input type="number" name="verify" class="txtInput" value="" maxlength="4" placeholder="请输入验证码" disabled="{{codeDisabled}}" bindinput="checkCode" />
+                   <input type="number" name="verify" class="txtInput" value="" maxlength="4" placeholder="请输入验证码" bindinput="checkCode" />
                 </view>
               </view>
             </view>
-            <view class="item">
+            <view class="item" wx:if="{{!disabled}}">
               <view class="left">
                 <text class="label">密码</text>
                 <view class="input-wrap">
-                   <input password type="text" name="pwd" class="txtInput" value="" maxlength="20" placeholder="请输入密码" disabled="{{disabled}}" />
+                   <input password type="text" name="pwd" class="txtInput" value="" maxlength="20" placeholder="请输入密码" />
                 </view>
               </view>
             </view>

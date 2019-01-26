@@ -44,13 +44,14 @@ Page({
 
   checkPwd: function (e) {
     this.setData({
-      disabled: !validatePassword(e.detail.value)
+      disabled: !validatePassword(e.detail.value).status
     });
   },
 
   submit: function (e) {
     console.log(e);
-    if (!this.data.disabled && validatePassword(e.detail.value.pwd)) {
+    let validPwd = validatePassword(e.detail.value.pwd);
+    if (!this.data.disabled && validPwd.status) {
       getLoginData().then(loginData => {
         wx.request({
           url: ApiHost + '/inter/home/updateMsg',
@@ -82,6 +83,8 @@ Page({
       }, err => {
         goLogin();
       });
+    } else if(!validPwd.status){
+      failMsg(validPwd.errMsg);
     }
   },
 

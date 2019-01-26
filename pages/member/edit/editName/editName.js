@@ -44,13 +44,14 @@ Page({
 
   checkName: function (e) {
     this.setData({
-      disabled: !validateUserName(e.detail.value)
+      disabled: !validateUserName(e.detail.value).status
     });
   },
 
   submit: function (e) {
     console.log(e);
-    if (!this.data.disabled && validateUserName(e.detail.value.username)) {
+    let validName = validateUserName(e.detail.value.username);
+    if (!this.data.disabled && validName.status) {
       getLoginData().then(loginData => {
         wx.request({
           url: ApiHost + '/inter/home/updateMsg',
@@ -89,6 +90,8 @@ Page({
       }, err => {
         goLogin();
       });
+    } else if(!validName.status){
+      failMsg(validName.errMsg);
     }
   },
 

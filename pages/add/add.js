@@ -98,7 +98,8 @@ Page({
     let {latitude, longitude, catList, catIndex, selectedDate, selectedTime} = that.data;
     let inputTime = convertToTimestamp(selectedDate, selectedTime);
     let catId = catList[catIndex].cat_id;
-    if(validateAllInfo(longitude, latitude, locname, locaddr, catId)){
+    let validAll = validateAllInfo(longitude, latitude, locname, locaddr, catId);
+    if(validAll.status){
       // 提交表单
       getToken().then(token=>{
         let postData = {
@@ -145,7 +146,7 @@ Page({
         goLogin();
       });
     }else{
-      failMsg('位置信息错误');
+      failMsg(validAll.errMsg);
     }
   },
 

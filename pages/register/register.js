@@ -8,8 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    disabled: true,
-    codeDisabled: true
+    disabled: true
   },
 
   /**
@@ -57,7 +56,9 @@ Page({
   bindPhone: function(e){
     //console.log(e);
     this.setData({
-      phoneNum: e.detail.value
+      phoneNum: e.detail.value,
+      disabled: true,
+      verifyCode: false
     })
   },
 
@@ -65,7 +66,8 @@ Page({
     //console.log(e);
     let phoneNum = e.target.dataset.phone;
     let that = this;
-    if(validatePhone(phoneNum)){
+    let validPhone = validatePhone(phoneNum);
+    if(validPhone.status){
       wx.request({
         url: ApiHost + '/xcc/Login/verificationCode',
         method: 'POST',
@@ -78,42 +80,41 @@ Page({
             successMsg('验证码发送成功');
             that.setData({
               verifyCode: res.data.data,
-              codeDisabled: false
+              disabled: false
             });
           } else {
             console.error(res);
             failMsg('验证码发送失败');
+            that.setData({disabled: true, verifyCode: false });
           }
         },
         fail: function (err) {
           console.error(err);
           failMsg('无法获取验证码');
+          that.setData({ disabled: true, verifyCode: false });
         }
       });
     }else{
       console.error('手机号不正确');
-      failMsg('手机号不正确');
+      failMsg(validPhone.errMsg);
+      that.setData({
+        disabled: true, verifyCode: false
+      });
     }
     
   },
 
   checkCode: function(e){
-    if(validateVerifyCode(e.detail.value) && e.detail.value == this.data.verifyCode){
-      this.setData({
-        disabled: false
-      });
-    }else{
-      this.setData({
-        disabled: true
-      });
-    }
+    
   },
 
   formSubmit: function(e){
     let inputInfo = e.detail.value;
     let that = this;
     console.log(that);
-    if(validateSubmit(inputInfo.phone, inputInfo.verify, inputInfo.pwd) && inputInfo.verify == that.data.verifyCode){
+    console.log(inputInfo);
+    let valSubmit = validateSubmit(inputInfo.phone, inputInfo.verify, inputInfo.pwd);
+    if(that.data.verifyCode && valSubmit.status && inputInfo.verify == that.data.verifyCode){
       wx.request({
         url: ApiHost + '/xcc/Login/register',
         method: 'POST',
@@ -168,17 +169,19 @@ Page({
           }
         }
       });
-    }else{
-      console.error('注册验证错误, 请检查注册输入信息');
-      failMsg('注册验证错误');
-    }
+    } else if(!valSubmit.status){
+      failMsg(valSubmit.errMsg);
+    } else {
+      failMsg('验证码错误');
+    } 
   },
 
   formReset: function(e){
     // automatically reset all input fields
     this.setData({
       disabled: true,
-      codeDisabled: true
+      verifyCode: false,
+      phoneNum: ''
     });
   },
 

@@ -7,7 +7,7 @@
     </view>
     <view class="user-info">
       <text class="user-name">{{userName}}</text>
-      <text class="user-phone">{{userPhone}}</text>
+      <!--<text class="user-phone">{{userPhone}}</text>-->
     </view>
   </view>
   <view class="user-edit-group">
@@ -21,16 +21,18 @@
         <i class="icon ion-ios-locked-outline"></i>
         <text class="label">修改密码</text>
       </navigator>
-      <!-->
       <navigator class="edit" url="/pages/member/edit/editPhone/editPhone">
         <i class="icon ion-ios-telephone-outline"></i>
         <text class="label">修改手机号</text>
-      </navigator>-->
+      </navigator>
       <navigator class="edit" url="/pages/member/edit/editPhoto/editPhoto">
         <i class="icon ion-ios-camera-outline"></i>
         <text class="label">修改头像</text>
       </navigator>
     </view>
+  </view>
+  <view class="footer">
+    <text>&copy;北京艾尼创想科技有限公司</text>
   </view>
 </view>
 <view class="page-body" wx:else>
