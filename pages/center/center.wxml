@@ -36,5 +36,5 @@
   </view>
 </view>
 <view class="page-body" wx:else>
-  <text class="login-notice">请先登录</text>
+  <text class="login-notice"></text>
 </view>

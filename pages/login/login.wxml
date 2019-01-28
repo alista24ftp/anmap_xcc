@@ -1,4 +1,4 @@
 <!--pages/member/login/login.wxml-->
-<view>
+<view class='login_main'>
   <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
 </view>

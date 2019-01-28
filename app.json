@@ -16,7 +16,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#000",
-    "navigationBarTitleText": "艾尼创想",
+    "navigationBarTitleText": "AnMap",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
