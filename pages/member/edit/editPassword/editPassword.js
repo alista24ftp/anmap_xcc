@@ -3,6 +3,7 @@ const { ApiHost } = require('../../../../config.js');
 const { validatePassword } = require('../../../../utils/regValidate.js');
 const { getLoginData, goLogin } = require('../../../../utils/login.js');
 const { failMsg, successMsg } = require('../../../../utils/util.js');
+const { hex_md5 } = require('../../../../lib/md5.js');
 Page({
 
   /**
@@ -58,7 +59,7 @@ Page({
           method: 'POST',
           data: {
             token: loginData.loginToken,
-            data: e.detail.value.pwd,
+            data: hex_md5(e.detail.value.pwd),
             type: 3
           },
           success: function (res) {

@@ -7,9 +7,15 @@
   </view>
   <view class="map-info">
     <form bindsubmit="onSubmit" bindreset="onReset">
-      <input class="input-group disabled" type="text" placeholder="请输入详细地址" name="locaddr" value="{{locAddr !== false ? locAddr : ''}}" disabled/>
-      <input class="input-group" type="text" placeholder="请输入名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
-      <textarea class="input-group" placeholder="请输入备注信息" name="loccom" value="{{locCom !== false ? locCom : ''}}"></textarea>
+      <view class='input-group disabled'>
+        <input type="text" placeholder="请输入详细地址" name="locaddr" value="{{locAddr !== false ? locAddr : ''}}" disabled/>
+      </view>
+      <view class="input-group">
+        <input type="text" placeholder="请输入名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
+      </view>
+      <view class="input-group">
+        <textarea placeholder="请输入备注信息" name="loccom" value="{{locCom !== false ? locCom : ''}}"></textarea>
+      </view>
       <view class="category-item">
         类型: 
         <view class="category" wx:if="{{catList !== undefined && catList.length > 0}}">
@@ -35,7 +41,7 @@
 
       <view class="btn-area">
         <!--<button class="btn-reset" form-type="reset">重置</button>-->
-        <button class="btn-submit" form-type="submit">更改</button>
+        <button class="btn-submit" form-type="submit">保存</button>
       </view>
     </form>
   </view>

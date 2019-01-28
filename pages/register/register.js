@@ -1,6 +1,7 @@
 const {ApiHost} = require('../../config.js');
 const {validatePhone, validateVerifyCode, validateSubmit} = require('../../utils/regValidate.js');
 const {formatImg, successMsg, failMsg} = require('../../utils/util.js');
+const { hex_md5 } = require('../../lib/md5.js');
 
 Page({
 
@@ -114,66 +115,98 @@ Page({
     console.log(that);
     console.log(inputInfo);
     let valSubmit = validateSubmit(inputInfo.phone, inputInfo.verify, inputInfo.pwd);
-    if(that.data.verifyCode && valSubmit.status && inputInfo.verify == that.data.verifyCode){
-      wx.request({
-        url: ApiHost + '/xcc/Login/register',
-        method: 'POST',
-        data: {
-          user_name: that.data.user_name,
-          user_tel: inputInfo.phone,
-          user_pwd: inputInfo.pwd,
-          open_id: that.data.openId,
-          unionid: that.data.unionId,
-          user_img: that.data.userImg
-        },
-        success: function (res) {
-          if (res.data.code == 200) {
-            if (res.data.type == 1) {
-              console.log('注册成功');
-              console.log(res.data);
-              let loginToken = res.data.data;
-              let userInfo = res.data.user;
-              userInfo.user_photo = formatImg(userInfo.user_img);
-              console.log(userInfo);
-              wx.setStorage({
-                key: 'userinfo',
-                data: {
-                  loginToken: loginToken,
-                  user: userInfo
-                },
-                success: function (info) {
-                  wx.navigateBack({
-                    delta: 2,
-                    success: function(res){
-                      successMsg('注册成功');
+    wx.showLoading({
+      title: '注册中',
+      mask: true,
+      success: function(res){
+        if (that.data.verifyCode && valSubmit.status && inputInfo.verify == that.data.verifyCode) {
+          wx.request({
+            url: ApiHost + '/xcc/Login/register',
+            method: 'POST',
+            data: {
+              user_name: that.data.user_name,
+              user_tel: inputInfo.phone,
+              user_pwd: hex_md5(inputInfo.pwd),
+              open_id: that.data.openId,
+              unionid: that.data.unionId,
+              user_img: that.data.userImg
+            },
+            success: function (res) {
+              if (res.data.code == 200) {
+                if (res.data.type == 1) {
+                  console.log('注册成功');
+                  console.log(res.data);
+                  let loginToken = res.data.data;
+                  let userInfo = res.data.user;
+                  userInfo.user_photo = formatImg(userInfo.user_img);
+                  console.log(userInfo);
+                  wx.setStorage({
+                    key: 'userinfo',
+                    data: {
+                      loginToken: loginToken,
+                      user: userInfo
+                    },
+                    success: function (info) {
+                      wx.hideLoading({
+                        success: function(res){
+                          wx.navigateBack({
+                            delta: 2,
+                            success: function (res) {
+                              successMsg('注册成功');
+                            }
+                          });
+                        }
+                      });
+                    },
+                    fail: function (err) {
+                      console.error(err);
+                      wx.hideLoading();
                     }
-                  })
-                },
-                fail: function (err) {
-                  console.error(err);
+                  });
+                } else if (res.data.type == 2) {
+                  console.error('注册失败');
+                  wx.hideLoading({
+                    success: function(res){
+                      failMsg('注册失败');
+                    }
+                  });
+                } else if (res.data.type == 3) {
+                  console.error('注册失败, 用户已存在');
+                  failMsg('用户已存在');
+                } else {
+                  console.error('注册失败, 请检查注册信息');
+                  wx.hideLoading({
+                    success: function (res) {
+                      failMsg('请检查注册信息');
+                    }
+                  });
                 }
-              });
-            } else if (res.data.type == 2) {
-              console.error('注册失败');
-              failMsg('注册失败');
-            } else if (res.data.type == 3) {
-              console.error('注册失败, 用户已存在');
-              failMsg('用户已存在');
-            } else {
-              console.error('注册失败, 请检查注册信息');
-              failMsg('请检查注册信息');
+              } else {
+                console.error('注册失败, 状态异常');
+                wx.hideLoading({
+                  success: function (res) {
+                    failMsg('注册状态异常');
+                  }
+                });
+              }
             }
-          } else {
-            console.error('注册失败, 状态异常');
-            failMsg('注册状态异常');
-          }
-        }
-      });
-    } else if(!valSubmit.status){
-      failMsg(valSubmit.errMsg);
-    } else {
-      failMsg('验证码错误');
-    } 
+          });
+        } else if (!valSubmit.status) {
+          wx.hideLoading({
+            success: function (res) {
+              failMsg(valSubmit.errMsg);
+            }
+          });
+        } else {
+          wx.hideLoading({
+            success: function (res) {
+              failMsg('验证码错误');
+            }
+          });
+        } 
+      }
+    });
+    
   },
 
   formReset: function(e){

@@ -75,12 +75,12 @@
   justify-content: center;
   width: 100%;
   padding-bottom: 30rpx;
-  margin-bottom: 5rpx;
+  line-height: 80rpx;
 }
 
 .display-select .active {
-  color: #ec49ae;
-  border-bottom: 1px solid #ec49ae;
+  color: #b91a3a;
+  border-bottom: 1px solid #b91a3a;
   overflow: visible;
 }
 

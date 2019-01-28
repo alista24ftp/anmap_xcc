@@ -32,16 +32,16 @@
 }
 
 .btn-submit {
-  margin-top: 10rpx;
+  margin-top: 30rpx;
 }
 
 .submit::after {
-  border: 1px solid #d41c1c;
+  border: 1px solid #b91a3a;
 }
 
 .submit {
   background-color: #ffffff;
-  color: #d41c1c;
+  color: #b91a3a;
   overflow: visible;
 }
 

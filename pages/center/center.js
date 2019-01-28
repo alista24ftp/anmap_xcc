@@ -60,6 +60,7 @@ Page({
       }, err=>{
         console.error(err);
         failMsg(err);
+        goLogin(); // 获取不到用户信息
       });
     }, err=>{
       goLogin();

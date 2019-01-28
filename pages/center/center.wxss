@@ -15,27 +15,37 @@
 }
 
 .user-img .pic{
-  border: 1px solid #000000;
+  border: 1px solid #999;
   border-radius: 50%;
-  height: 100px;
-  width: 100px;
+  height: 124rpx;
+  width: 124rpx;
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
   color: #ffffff;
-  font-size: 27rpx;
+  font-size: 34rpx;
+  text-align: center;
 }
 
 .user-edit-group {
   padding: 30rpx;
-  background-color: #abd6fe
+  border-top: 22rpx solid #f3f3f3;
 }
 
 .user-edit-group .edit-title {
-  border-bottom: 1px solid #234d5e;
   padding-bottom: 20rpx;
+  position: relative;
+  line-height: 40rpx;
+  padding-left: 20rpx;
+}
+.user-edit-group .edit-title:after{
+  position: absolute;
+  left: 0; height: 40rpx; width: 6rpx;
+  background: #b91a3a;
+  content: "";display: block;
+  top: 0;
 }
 
 .user-edit-group .edit-options {
@@ -51,8 +61,10 @@
   align-items: center;
 }
 
-.edit .icon {
-  font-size: 100rpx;
+.edit .iconfont {
+  font-size: 60rpx;
+  color: #b91a3a;
+  padding-bottom:10rpx;
 }
 
 .edit .label {
@@ -72,4 +84,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+  padding-bottom: 40rpx;
+  font-size: 34rpx;
+  color: #999;
 }

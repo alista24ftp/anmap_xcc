@@ -68,12 +68,17 @@ module.exports = {
   },
 
   goLogin: () => {
-    wx.navigateTo({
-      url: '/pages/login/login',
-      success: function (res) {
-        failMsg('请先登录');
+    wx.clearStorage({
+      complete: function(){
+        wx.navigateTo({
+          url: '/pages/login/login',
+          success: function (res) {
+            failMsg('请先登录');
+          }
+        });
       }
     });
+    
   }
   
 };

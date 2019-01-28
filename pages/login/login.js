@@ -28,6 +28,7 @@ Page({
             // 发起网络请求
             wx.request({
               url: ApiHost + '/xcc/Login/index',
+              method: 'POST',
               data: {
                 code: res.code,
                 iv: data.iv,
@@ -60,13 +61,18 @@ Page({
                     console.log(res.data);
                     console.log('res');
                     // 未注册
-                    wx.navigateTo({
-                      url: '/pages/register/register?id=' + res.data.openId + '&user_name='+res.data.user_name+'&unionid=' + res.data.unionid + '&userimg=' + res.data.user_img,//userImg,
-                      fail: function (err) {
-                        console.error(err);
-                        failMsg('无法登录与注册');
-                      }
-                    })
+                    if(res.data.openId && res.data.unionid){
+                      wx.navigateTo({
+                        url: '/pages/register/register?id=' + res.data.openId + '&user_name=' + res.data.user_name + '&unionid=' + res.data.unionid + '&userimg=' + res.data.user_img,//userImg,
+                        fail: function (err) {
+                          console.error(err);
+                          failMsg('信息获取失败');
+                        }
+                      });
+                    }else{
+                      failMsg('信息获取失败');
+                    }
+                    
                   }
                 } else {
                   console.error('登录状态异常');

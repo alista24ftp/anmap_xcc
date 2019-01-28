@@ -34,13 +34,13 @@
 
 .avatar .pic {
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  width: 90px;
+  height: 90px;
 }
 
 .infos {
   margin-bottom: 40rpx;
-  padding: 20rpx;
+  padding: 20rpx 30rpx;
 }
 
 .item {
@@ -69,13 +69,27 @@
 
 .btn-area {
   display: flex;
+  justify-content: center;
 }
 
 .btn-area .btn-reset {
   width: 100%;
+  margin: 0 30rpx;
 }
 
 .btn-area .btn-submit {
-  background-color: #eeea0c;
+  background-color: #b91a3a;
+  color: #fff;
   width: 100%;
+  margin: 0 30rpx;
 }
+
+.label{font-size: 34rpx; padding-top: 20rpx;}
+.left input{border-bottom: 1px solid #ddd; height: 80rpx; font-size: 30rpx;}
+.item{position: relative;}
+.right{position: absolute; bottom: 0; right: 0; z-index: 99;}
+.right button{height: 80rpx; line-height: 80rpx; background: none;}
+.right button::after {
+  border: none;
+}
+
