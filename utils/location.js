@@ -22,14 +22,15 @@ const chooseLocation = () => {
   });
 };
 
-const getLocationsByCat = (token, catId) => {
+const getLocationsByCat = (token, catId, userId) => {
   return new Promise((resolve, reject)=>{
     wx.request({
       url: ApiHost + '/inter/home/articleGetList',
       method: 'POST',
       data: {
         token,
-        cat_id: catId
+        cat_id: catId,
+        user_id: userId
       },
       success: function (res) {
         console.log(res);

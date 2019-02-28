@@ -11,7 +11,7 @@
         <input type="text" placeholder="请输入详细地址" name="locaddr" value="{{locAddr !== false ? locAddr : ''}}" disabled/>
       </view>
       <view class="input-group">
-        <input type="text" placeholder="请输入名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
+        <input type="text" placeholder="请输入合作单位名称" name="locname" value="{{locName !== false ? locName : ''}}"/>
       </view>
       <view class="input-group">
         <textarea placeholder="请输入备注信息" name="loccom" value="{{locCom !== false ? locCom : ''}}"></textarea>
@@ -26,7 +26,7 @@
         <view class="category" wx:else>无</view>
       </view>
       <view class="input-date">
-        时间:
+        加入时间:
         <view class="sel-date">
           <picker mode="date" value="{{selectedDate}}" bindchange="selectDate">
             <view class="picker">{{selectedDate}}</view>

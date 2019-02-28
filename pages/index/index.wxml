@@ -1,13 +1,23 @@
 <view class="page-body">
   <view class="category-select" wx:if="{{catList !== undefined && catList.length > 0}}">
-    <picker class="category-picker" range="{{catList}}" range-key="cat_name" value="{{catIndex}}" bindchange="selectCat">
-      <view class="picker-icon">
-        <i class="icon ion-chevron-down"></i>
-        <view class="picker">
-          <text class="category">{{catList[catIndex].cat_name}}</text>
+    <view class="picker-section">
+      <picker class="emp-picker" range="{{empList}}" range-key="user_name" value="{{empIndex}}" bindchange="selectEmp" wx:if="{{isBoss}}">
+        <view class="picker-icon">
+          <i class="icon ion-chevron-down"></i>
+          <view class="picker">
+            <text class="category">{{empList[empIndex].user_name}}</text>
+          </view>
         </view>
-      </view>
-    </picker>
+      </picker>
+      <picker class="category-picker" range="{{catList}}" range-key="cat_name" value="{{catIndex}}" bindchange="selectCat">
+        <view class="picker-icon">
+          <i class="icon ion-chevron-down"></i>
+          <view class="picker">
+            <text class="category">{{catList[catIndex].cat_name}}</text>
+          </view>
+        </view>
+      </picker>
+    </view>
     <button class="curr-location-btn" bindtap="moveToLocation"><i class="icon ion-location"></i></button>
     <button class="add-location-btn" bindtap="addLocation"><i class="icon ion-plus-round"></i></button>
     <button class="share-btn" open-type="share"><i class="icon ion-share"></i></button>
@@ -27,6 +37,7 @@
         markers="{{markers}}"
         polyline="{{polyline}}"
         bindtap="clickMap"
+        bindmarkertap="markerTap"
         bindpoitap="clickMapPoi"
         show-location
       ></map>
@@ -58,7 +69,10 @@
     <view class="location-list" wx:if="{{catList !== undefined && catList.length > 0}}">
       <view class="location" wx:for="{{allLocations}}" wx:for-index="idx">
         <view class="loc-wrap" data-index="{{idx}}" bindtap="edit">
-          <text class="loc-cat" wx:if="{{catIndex == 0}}">[{{item.cat_name}}]</text>
+          <view class="loc-detail-info">
+            <text class="loc-user" wx:if="{{isBoss && empIndex == 0}}">[{{item.user_name}}]</text>
+            <text class="loc-cat" wx:if="{{catIndex == 0}}">[{{item.cat_name}}]</text>
+          </view>
           <text class="loc-name">{{item.name}}</text>
           <text class="loc-addr">{{item.address}}</text>
         </view>

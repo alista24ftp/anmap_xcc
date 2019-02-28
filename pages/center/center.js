@@ -1,7 +1,7 @@
 // pages/center/center.js
 const { ApiHost } = require('../../config.js');
 const { formatImg, successMsg, failMsg, getSettings } = require('../../utils/util.js');
-const { getToken, getLoginData, goLogin, getUserInfoByToken } = require('../../utils/login.js');
+const { getToken, getLoginData, goLogin, getUserInfoByToken, setLoginData } = require('../../utils/login.js');
 Page({
 
   /**
@@ -38,12 +38,15 @@ Page({
   onShow: function () {
     let that = this;
     getLoginData().then(loginData=>{
+      /*
       getUserInfoByToken(loginData.loginToken).then(info=>{
         console.log(info);
         loginData.user.user_name = info.user_name;
         loginData.user.user_tel = info.user_tel;
         loginData.user.user_img = info.user_img;
         loginData.user.user_photo = formatImg(info.user_img);
+        loginData.user.is_boos = info.is_boos;
+        loginData.user.user_id = info.user_id;
         that.setData({
           isLoggedIn: true,
           userName: loginData.user.user_name,
@@ -61,6 +64,18 @@ Page({
         console.error(err);
         failMsg(err);
         goLogin(); // 获取不到用户信息
+      });*/
+      setLoginData(loginData).then(data=>{
+        that.setData({
+          isLoggedIn: true,
+          userName: data.user.user_name,
+          userPhone: data.user.user_tel,
+          userPhoto: data.user.user_photo
+        });
+      }, err=>{
+        console.error(err);
+        failMsg(err);
+        goLogin();
       });
     }, err=>{
       goLogin();

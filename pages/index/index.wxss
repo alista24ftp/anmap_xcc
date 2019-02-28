@@ -33,11 +33,18 @@
   padding: 15rpx;
 }
 
-.category-picker {
+.picker-section {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
-  margin-left: 40%;
+  justify-content: flex-end;
+}
+
+.emp-picker, .category-picker {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /*font-size: 30rpx;*/
+  /*margin-left: 40%;*/
 }
 
 .picker-icon {
@@ -164,6 +171,12 @@
 .loc-wrap {
   display: flex;
   flex-direction: column;
+  font-size: 27rpx;
+}
+
+.loc-detail-info {
+  display: flex;
+  flex-direction: row;
   font-size: 27rpx;
 }
 

@@ -1,7 +1,7 @@
 const regeneratorRuntime = require('../../lib/runtime.js');
 const {ApiHost} = require('../../config.js');
 const {failMsg, getSettings} = require('../../utils/util.js');
-const {getToken, goLogin} = require('../../utils/login.js');
+const {getToken, getLoginData, setLoginData, goLogin} = require('../../utils/login.js');
 const {getLocationsByCat, getCurrentLocation, getAllLocations} = require('../../utils/location.js');
 Page({
   data: {
@@ -20,20 +20,53 @@ Page({
   onShow: function(){
     let that = this;
     that.getCategories().then(categories=>{
-      getToken().then(token => {
-        that.setData({
-          catList: [{cat_id: 0, cat_name: "所有"}].concat(categories),
-          catIndex: 0
+      getLoginData().then(loginData => {
+        setLoginData(loginData).then(data=>{
+          that.setData({
+            catList: [{ cat_id: 0, cat_name: "所有类别" }].concat(categories),
+            catIndex: 0,
+            isBoss: data.user.is_boos == 1,
+            userId: data.user.user_id
+          });
+
+          that.getEmps(data.loginToken).then(emps => {
+            console.log(emps);
+            that.setData({
+              empList: [{ user_id: 0, user_name: "所有人" }].concat(emps),
+              empIndex: 0
+            });
+            that.setLocations(data.loginToken, 0, 0);
+          }, err => {
+            that.setData({
+              empList: [],
+              empIndex: -1
+            });
+            that.setLocations(data.loginToken, 0, null);
+          });
+        }, err=>{
+          goLogin();
         });
-        that.setLocations(token, 0);
       }, err => {
-        goLogin();
+        // goLogin();
+        that.setData({
+          catList: [{ cat_id: 0, cat_name: "所有类别" }].concat(categories),
+          catIndex: 0,
+          isBoss: false,
+          empList: [],
+          empIndex: -1,
+          allLocations: [],
+          markers: [],
+          polyline: []
+        });
       });
     }, err=>{
       failMsg(err);
       that.setData({
         catList: [],
         catIndex: -1,
+        isBoss: false,
+        empList: [],
+        empIndex: -1,
         allLocations: [],
         markers: [],
         polyline: []
@@ -82,19 +115,50 @@ Page({
     });
   },
 
-  setLocations: function(token, catId){
+  getEmps: function(token){
+    return new Promise((resolve, reject)=>{
+      wx.request({
+        url: ApiHost + '/inter/home/group',
+        method: 'POST',
+        data: {token},
+        success: function(res){
+          console.log(res);
+          if(res.data.code !== 400){
+            if(res.data.type == 1){
+              resolve(res.data.data);
+            }else{
+              reject('没有业务员');
+            }
+          }
+          resolve(res);
+        },
+        fail: function(err){
+          console.error(err);
+          reject('获取业务员错误');
+        }
+      });
+    });
+  },
+
+  setLocations: function(token, catId, userId){
     let that = this;
-    getLocationsByCat(token, catId).then(locations => {
+    getLocationsByCat(token, catId, userId).then(locations => {
       console.log(locations);
       let allLocations = catId == 0 ? locations.list : locations.data;
       let markers = allLocations.filter(loc => loc.is_show == 1).map((loc, i) => {
         return {
           id: i + 1,
           latitude: loc.lat,
-          longitude: loc.lon
+          longitude: loc.lon,
+          iconPath: '',
+          callout: {
+            content: '姓名: ' + loc.user_name + '\n单位名称: ' + loc.name + '\n类型: ' + loc.cat_name + '\n备注: ' + (loc.remarks ? loc.remarks : ''),
+            padding: '15rpx'
+          }
         };
       });
-      let polyline;
+      let polyline = [];
+      /*
       if(catId == 0){
         polyline = locations.data.map(category => {
           let points = locations.list.filter(loc => loc.cat_id == category.cat_id && loc.is_show == 1).map(loc => {
@@ -121,7 +185,7 @@ Page({
           width: 2,
           dottedLine: true
         }] : [];
-      }
+      }*/
       
       that.setData({
         allLocations,
@@ -138,13 +202,27 @@ Page({
     });
   },
 
+  selectEmp: function(e){
+    let empList = this.data.empList;
+    let empId = empList[e.detail.value].user_id;
+    let that = this;
+    that.setData({ empIndex: e.detail.value }, ()=>{
+      that.selectCat({ detail: { value: that.data.catIndex } });
+    });
+    
+  },
+
   selectCat: function(e){
     let catList = this.data.catList;
+    let userId = null;
+    if(this.data.isBoss){
+      userId = this.data.empList[this.data.empIndex].user_id;
+    }
     let catId = catList[e.detail.value].cat_id; 
     this.setData({ catIndex: e.detail.value });
     let that = this;
     getToken().then(token=>{
-      that.setLocations(token, catId);
+      that.setLocations(token, catId, userId);
     }, err=>{
       goLogin();
     });
@@ -160,23 +238,37 @@ Page({
   },
 
   edit: function(e){
-    let locIndex = e.currentTarget.dataset.index;
-    let {allLocations, catIndex} = this.data;
-    let location = allLocations[locIndex];
-    let locData = {
-      hasLocation: true,
-      locAddr: location.address,
-      locName: location.name,
-      locCom: location.remarks,
-      latitude: Number(location.lat),
-      longitude: Number(location.lon),
-      artId: location.article_id,
-      selectedTime: Number(location.input_time) * 1000,
-      catId: location.cat_id
-    }
-    wx.navigateTo({
-      url: '/pages/add/add?type=edit&locdata=' + JSON.stringify(locData)
+    let that = this;
+    getLoginData().then(loginData=>{
+      let locIndex = e.currentTarget.dataset.index;
+      let { allLocations, catIndex } = that.data;
+      let location = allLocations[locIndex];
+      if (loginData.user.user_id == location.user_id) {
+        let locData = {
+          hasLocation: true,
+          locAddr: location.address,
+          locName: location.name,
+          locCom: location.remarks,
+          latitude: Number(location.lat),
+          longitude: Number(location.lon),
+          artId: location.article_id,
+          selectedTime: Number(location.input_time) * 1000,
+          catId: location.cat_id
+        }
+        wx.navigateTo({
+          url: '/pages/add/add?type=edit&locdata=' + JSON.stringify(locData)
+        });
+      }
+    }, err=>{
+      goLogin();
     });
+    
+  },
+
+  markerTap: function(e){
+    console.log(e);
+    let markerId = e.markerId;
+
   },
 
   getCenterLocation: function () {
