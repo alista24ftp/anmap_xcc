@@ -31,7 +31,7 @@
     <view class="page-section page-section-gap">
       <map
         id="myMap"
-        subkey="2E4BZ-BHYW5-PHKIE-QX4BM-6Y4TV-QWBIO"
+        subkey="G7ABZ-JWBW4-VSLUY-DX3M3-EDN5K-O4BHT"
         latitude="{{latitude}}"
         longitude="{{longitude}}"
         markers="{{markers}}"
